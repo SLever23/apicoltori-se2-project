@@ -1,0 +1,24 @@
+{
+  "name": "se2-project",
+  "version": "1.0.0",
+  "description": "progetto ingegneria del software 2 anno 2018-2019",
+  "main": "api.js",
+  "scripts": {
+	"start": "node api.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeverSimone/SE2-Project.git"
+  },
+  "author": "Simone, Giulia P, Giulia C, Michele, Edoardo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LeverSimone/SE2-Project/issues"
+  },
+  "homepage": "https://github.com/LeverSimone/SE2-Project#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  }
+}
