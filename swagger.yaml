@@ -2,7 +2,7 @@ swagger: '2.0'
 info:
   version: '1.0'
   title: "apicoltori-se2-project"
-  description: Polls is a simple API allowing consumers to view polls and vote in them.
+  description: Project for the Software Engineering 2 course held at the bachelor's degree in Computer Science at the University of Trento.
   license:
     name: MIT
     url: https://github.com/apiaryio/polls-api/blob/master/LICENSE
