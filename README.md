@@ -4,3 +4,4 @@ Project for the Software Engineering 2 course held at the bachelor's degree in C
 Team members:
  
 * [Simone Lever](https://github.com/LeverSimone)
+* [Giulia Peserico](https://github.com/GiuliaPeserico)
