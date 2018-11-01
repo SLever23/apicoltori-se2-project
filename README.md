@@ -7,3 +7,4 @@ Team members:
 * [Giulia Peserico](https://github.com/GiuliaPeserico)
 * [Edoardo Zacchi](https://github.com/EdoZac)
 * [Michele Tessari](https://github.com/TEXflip)
+* [Giulia Carocari](https://github.com/geeooleea)
