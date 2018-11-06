@@ -4,8 +4,12 @@
   "description": "progetto ingegneria del software 2 anno 2018-2019",
   "main": "api.js",
   "scripts": {
-	"start": "node api.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node api.js",
+    "test": "jest"
+  },
+  "jest": {
+    "verbose": true,
+    "collectCoverage": true
   },
   "repository": {
     "type": "git",
@@ -20,5 +24,8 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
   }
 }
