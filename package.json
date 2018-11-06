@@ -1,5 +1,5 @@
 {
-  "name": "se2-project",
+  "name": "apicoltori-se2-project",
   "version": "1.0.0",
   "description": "progetto ingegneria del software 2 anno 2018-2019",
   "main": "api.js",
@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LeverSimone/SE2-Project.git"
+    "url": "git+https://github.com/LeverSimone/apicoltori-se2-project.git"
   },
   "author": "Simone, Giulia P, Giulia C, Michele, Edoardo",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/LeverSimone/SE2-Project/issues"
+    "url": "https://github.com/LeverSimone/apicoltori-se2-project/issues"
   },
-  "homepage": "https://github.com/LeverSimone/SE2-Project#readme",
+  "homepage": "https://github.com/LeverSimone/apicoltori-se2-project#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4"
