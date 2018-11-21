@@ -1,16 +1,1011 @@
 swagger: '2.0'
 info:
   version: '1.0'
-  title: "apicoltori-se2-project"
-  description: Project for the Software Engineering 2 course held at the bachelor's degree in Computer Science at the University of Trento.
+  title: Beekeeper
+  description:
+    'Manage hundreds of bees and collect the honey in the simplest way. With Beekeeper you can create exams and crowdsourcing surveys, easily submit them to your students and evaluate the results.'
   license:
     name: MIT
-    url: https://github.com/apiaryio/polls-api/blob/master/LICENSE
 host: apicoltori-se2-project.herokuapp.com
-basePath: /
+basePath: /v1
+tags:
+- name: Task
+  description: 'Task management'
+- name: Exam
+  description: 'Exam management'
+- name: User
+  description: 'User and session management'
+- name: Submission
+  description: 'Submission management'
+- name: Review
+  description: 'Peer review management'
+- name: Topic
+  description: 'Task topic management'
+- name: Class
+  description: 'Students class management'
+- name: Task-set
+  description: 'Task-set management'
 schemes:
 - https
 consumes:
 - application/json
 produces:
 - application/json
+paths:
+  /tasks:
+    parameters:
+    - $ref: '#/parameters/Auth-header'
+    get:
+      tags: 
+      - Task
+      summary: Retrieve a list of tasks
+      parameters:
+      - in: query
+        name: searchkey
+        type: string
+        required: false
+        description: Query to filter the results by name
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Task'
+        401:
+          description: Unauthorized
+    post:
+      tags:
+      - Task
+      summary: Create a task
+      parameters:
+      - in: body
+        name: task
+        description: 'The task to be created'
+        required: true
+        schema:
+          $ref: '#/definitions/Task'
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/Task'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal server error
+          
+  /tasks/{id}:
+    parameters:
+      - $ref: '#/parameters/id'
+      - $ref: '#/parameters/Auth-header'
+    get:
+      tags:
+      - Task
+      summary: Retrieve a task by id
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/Task'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+    put:
+      tags: 
+      - Task
+      summary: Update a task
+      parameters:
+      - in: body
+        name: task
+        description: 'The task to be updated'
+        required: true
+        schema:
+          $ref: '#/definitions/Task'
+      responses:
+        204:
+          description: No content
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal server error
+    delete:
+      tags: 
+      - Task
+      summary: Delete a task
+      responses:
+        204:
+          description: No content
+        500:
+          description: Internal server error
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+          
+  /exams:
+    parameters:
+    - $ref: '#/parameters/Auth-header'
+    get:
+      tags:
+      - Exam
+      summary: Retrieve all exams for a user
+      parameters:
+      - in: query
+        name: userid
+        description: 'Id of the user'
+        type: integer
+        required: true
+      - in: query
+        name: teaching-assistant
+        description: 'If this parameter is true (false) then the exams in which this user is a teaching assistant (student) are returned.'
+        type: boolean
+        required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Exam'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+    post:
+      tags:
+      - Exam
+      summary: Create an exam
+      parameters:
+      - in: body
+        name: exam
+        description: 'The exam to be created'
+        required: true
+        schema:
+          $ref: '#/definitions/Exam'
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/Exam'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+  
+  /exams/{id}:
+    parameters:
+    - $ref: '#/parameters/id'
+    - $ref: '#/parameters/Auth-header'
+    get:
+      tags:
+      - Exam
+      parameters:
+      - in: query
+        name: user
+        type: integer
+        required: false
+        description: id of the user taking the exam. If present returns a '#/definitions/StudentExam'
+      summary: Retrieve an exam by ID
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Exam'
+              #oneOf:
+              #    - $ref: '#/definitions/Exam'
+              #    - $ref: '#/definitions/StudentExam'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+    put:
+      tags:
+      - Exam
+      summary: Update an exam
+      parameters:
+      - in: body
+        name: exam
+        description: 'The exam to be updated'
+        required: true
+        schema:
+          $ref: '#/definitions/Exam'
+      responses:
+        204:
+          description: No content
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+        500:
+          description: Internal server error
+    delete:
+      tags:
+      - Exam
+      summary: Delete an exam
+      responses:
+        204:
+          description: No content
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+        500:
+          description: Internal server error
+          
+  /user:
+    get:
+      tags:
+        - User
+      summary: Retrieve a list of users
+      parameters:
+      - $ref: '#/parameters/Auth-header'
+      - name: email
+        in: query
+        description: The email of the user
+        required: false
+        type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+    post:
+      tags:
+      - User
+      summary: Create a user
+      parameters:
+      - in: body
+        name: user
+        description: 'The user to be created'
+        required: true
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/User'
+        403:
+          description: Forbidden
+        500:
+          description: Internal server error
+
+  /session:
+    post:
+      tags:
+      - User
+      summary: Create a user session (login)
+      parameters:
+      - in: body
+        name: user
+        description: 'The user to be logged'
+        required: true
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        201:
+          description: Ok
+          schema:
+            type: string
+            format: UUID
+        500:
+          description: Internal server error
+  /session/{token}:
+    parameters:
+    - in: path
+      name: token
+      type: string
+      format: UUID
+      required: true
+      description: Token for the user to be logged out
+    - $ref: '#/parameters/Auth-header'
+    delete:
+      tags:
+      - User
+      summary: Delete a user session (logout)
+      responses:
+        204:
+          description: No content
+        401:
+          description: Unauthorized
+        500:
+          description: Internal server error
+          
+  /classes:
+    parameters:
+    - $ref: '#/parameters/Auth-header'
+    get:
+      tags:
+        - Class
+      summary: Retrieve a list of all classes by exam
+      parameters:
+      - in: query
+        name: exam
+        type: integer
+        required: true
+        description: Id of the exam associated with the class
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Class'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+    post:
+      tags:
+      - Class
+      summary: Create a class
+      parameters:
+      - in: body
+        name: class
+        description: The class to be created
+        required: true
+        schema:
+          $ref: '#/definitions/Class'
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/Class'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+          
+  /classes/{id}:
+    parameters:
+    - $ref: '#/parameters/id'
+    - $ref: '#/parameters/Auth-header'
+    get:
+      tags:
+      - Class
+      summary: Retrieve a class by ID
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Class'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+    put:
+      tags:
+      - Class
+      summary: Update a class
+      parameters:
+      - in: body
+        name: class
+        description: 'The class to be updated'
+        required: true
+        schema:
+          $ref: '#/definitions/Class'
+      responses:
+        204:
+          description: No content
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+        500:
+          description: Internal server error
+    delete:
+      tags:
+      - Class
+      summary: Delete a class
+      responses:
+        204:
+          description: No content
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+        500:
+          description: Internal server error
+      
+    
+    
+  /submission:
+    parameters:
+    - $ref: '#/parameters/Auth-header'
+    get:
+      tags:
+        - Submission
+      summary: Retrieve a list of submissions by user and exam
+      parameters:
+      - in: query
+        name: exam
+        type: integer
+        required: true
+        description: Id of the exam associated with the submissions
+      - in: query
+        name: user
+        type: integer
+        required: true
+        description: Id of the user associated with the submissions
+      - in: query
+        name: task
+        type: integer
+        required: false
+        description: Id of the task associated with the submissions
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Submission'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+    post:
+      tags:
+      - Submission
+      summary: Create a submission
+      parameters:
+      - in: body
+        name: body
+        description: 'The submission to be created'
+        required: true
+        schema:
+          $ref: '#/definitions/Submission'
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/Submission'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+          
+  /submission/{id}:
+    parameters:
+    - $ref: '#/parameters/id'
+    - $ref: '#/parameters/Auth-header'
+    put:
+      tags:
+      - Submission
+      summary: Update a submission
+      parameters:
+      - in: body
+        name: body
+        description: 'The submission to be updated'
+        required: true
+        schema:
+          $ref: '#/definitions/Submission'
+      responses:
+        204:
+          description: No content
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+    get: 
+      tags:
+      - Submission
+      summary: Retrive a submission by id
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/Submission'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404: 
+          description: Not found
+    delete:
+      tags:
+      - Submission
+      summary: Delete a submission
+      responses:
+        204:
+          description: No content
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+          
+  /reviews:
+    parameters:
+    - $ref: '#/parameters/Auth-header'
+    get:
+      parameters:
+      - in: query
+        name: exam
+        type: integer
+        required: true
+        description: Id of the exam associated with the reviews
+      - in: query
+        name: user
+        type: integer
+        required: true
+        description: Id of the user that made the submission associated with the reviews
+      - in: query
+        name: task
+        type: integer
+        required: false
+        description: Id of the task associated with the reviews
+      tags:
+        - Review
+      summary: Retrieve a list of reviews by user (of the submission) and exam
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Review'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+    post:
+      tags:
+      - Review
+      summary: Create a review
+      parameters:
+      - in: body
+        name: task
+        description: 'The review to be created'
+        required: true
+        schema:
+          $ref: '#/definitions/Review'
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/Review'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        500:
+          description: Internal Server Error
+
+  /reviews/{id}:
+    parameters:
+    - $ref: '#/parameters/id'
+    - $ref: '#/parameters/Auth-header'
+    get:
+      tags:
+      - Review
+      summary: Retrieve a review by ID
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/Review'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+        500:
+          description: Internal Server Error
+    put:
+      tags:
+      - Review
+      summary: Update a review by id
+      parameters:
+      - in: body
+        name: task
+        description: 'The review to be updated'
+        required: true
+        schema:
+          $ref: '#/definitions/Review'
+      responses:
+        204:
+          description: No content
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+        500:
+          description: Internal server error
+    delete:
+      tags:
+      - Review
+      summary: Delete a review by id
+      responses:
+        204:
+          description: No content
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+        500:
+          description: Internal server error
+  
+  /topics:
+    parameters:
+    - $ref: '#/parameters/Auth-header'
+    get:
+      tags: 
+      - Topic
+      summary: Retrieve a list of topics
+      parameters:
+      - in: query
+        name: searchkey
+        type: string
+        required: false
+        description: Query to filter the results by name
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Topic'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+    post:
+      tags:
+      - Topic
+      summary: Create a topic
+      parameters:
+      - in: body
+        name: topic
+        schema:
+          $ref: '#/definitions/Topic'
+        required: true
+        description: The topic to be created
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/Topic'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+  /topics/{id}:
+    parameters:
+    - $ref: '#/parameters/id'
+    - $ref: '#/parameters/Auth-header'
+    get:
+      tags: 
+      - Topic
+      summary: Retrieve a topic by id
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Topic'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+    put:
+      summary: Update a topic
+      parameters:
+      - in: body
+        name: topic
+        schema:
+          $ref: '#/definitions/Topic'
+        required: true
+        description: The topic to be updated
+      responses:
+        204:
+          description: No content
+        404:
+          description: Not found
+        500:
+          description: Internal server error
+    delete:
+      summary: Delete a topic
+      tags: 
+      - Topic
+      responses:
+        204:
+          description: No content
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+        500:
+          description: Internal server error
+          
+  /peer:
+    parameters:
+    - $ref: '#/parameters/Auth-header'
+    get:
+      summary: 'Retrieve the submissions a student has to review'
+      parameters:
+      - in: query
+        name: exam
+        type: integer
+        required: true
+        description: Id of the exam to be reviewed
+      - in: query
+        name: user
+        type: integer
+        required: true
+        description: Id of the user making the reviews
+      responses:
+        200:
+          description: OK
+          schema:
+            description: id of the user to be reviewed
+            type: integer
+        400:
+          description: Bad request. Exam finished or not yet started.
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+        500:
+          description: Internal Server Error
+          
+definitions:
+  Task:
+    title: 'A question to be asked in an exam'
+    type: object
+    properties:
+      id:
+        type: integer
+      title: 
+        type: string
+      description: 
+        type: string
+      topic:
+        type: array
+        items:
+          ##type: string
+          ##format: uri
+          $ref: '#/definitions/Topic'
+      type:
+        type: string
+        enum: ['multiple-choice','true-false', 'short-paragraph', 'long-paragraph']
+      ### Use polymorphism? Bad request?
+      answers:
+        type: array
+        items: 
+          type: string
+    required:
+      - title
+      - description
+      - type
+      
+  Exam:
+    title: 'Collection of questions to be submitted to students'
+    type: object
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+      start_date: 
+        type: string
+        format: date
+      deadline_delivery: 
+        type: string
+        format: date
+      deadline_review: 
+        type: string
+        format: date
+      type:
+        type: string
+        enum: ['crowdsourcing','exam']
+      collaborators: 
+        type: array
+        items: 
+          type: string
+          format: uri
+      class: 
+        type: string
+        format: uri
+      compulsory-tasks: 
+        type: array
+        items: 
+          #type: string
+          #format: uri
+          $ref: '#/definitions/Task'
+      ### Riguardare mappa che non funziona
+      task-pool:
+        type: object
+        additionalProperties:
+          type: object
+          properties:
+            topic:
+              #type: string
+              #format: uri
+              $ref: '#/definitions/Topic'
+            quantity:
+              type: integer
+    required:
+      - title
+      - start_date
+      - deadline_delivery
+      - deadline_review
+      - collaborators
+      - class
+  
+  StudentExam:
+    allOf:
+    - $ref: '#/definitions/Exam'
+    - type: object
+      properties:
+        id:
+          type: integer
+          description: id of the user taking the exam
+        drawn-tasks:
+            type: array
+            items:
+              $ref: '#/definitions/Task'
+        mark:
+          type: integer
+  
+  User:
+    title: 'Student or teaching assistant'
+    type: object
+    properties:
+      id:
+        type: integer
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+    required:
+      - email
+      - password
+      
+  Submission:
+    title: 'Submission'
+    type: object
+    properties:
+      id:
+        type: integer
+      exam:
+        type: string
+        format: uri
+      user:
+        description: 'URI of the user making the submission'
+        type: string
+        format: uri
+      task:
+        type: string
+        format: uri
+      review:
+        type: string
+        format: uri
+      response:
+        type: string
+    required: 
+      - exam
+      - user
+      - task
+      - response
+
+  Review:
+    title: 'Review of a submission'
+    type: object
+    properties:
+      id:
+        type: integer
+      exam:
+        type: string
+        format: uri
+      user:
+        description: 'URI of the user making the review'
+        type: string
+        format: uri
+      task:
+        type: string
+        format: uri
+      submission:
+        type: string
+        format: uri
+      response:
+        type: string
+    required:
+      - id
+    
+  Topic:
+    title: 'Topic of a task'
+    type: object
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+    required:
+      - title
+      
+  Class:
+    title: 'Group of students'
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      students:
+        type: array
+        items: 
+          type: string
+          format: uri
+    required:
+      - name
+      - students
+  
+
+parameters:
+  Auth-header:
+    in: header
+    description: custom HTTP header for authentication
+    name: X-auth
+    type: string
+    format: UUID
+  id:
+    in: path
+    name: id
+    type: integer
+    required: true
+    description: The id of the resource
