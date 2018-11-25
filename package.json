@@ -4,7 +4,8 @@
   "description": "progetto ingegneria del software 2 anno 2018-2019",
   "main": "api.js",
   "scripts": {
-    "start": "nodemon api.js",
+    "start": "node api.js",
+    "nodemon": "nodemon api.js",
     "test": "jest"
   },
   "jest": {
