@@ -4,7 +4,7 @@
   "description": "progetto ingegneria del software 2 anno 2018-2019",
   "main": "api.js",
   "scripts": {
-    "start": "node api.js",
+    "start": "nodemon api.js",
     "test": "jest"
   },
   "jest": {
@@ -23,7 +23,8 @@
   "homepage": "https://github.com/LeverSimone/apicoltori-se2-project#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
     "jest": "^23.6.0"
