@@ -6,7 +6,7 @@ const db = require('../../../db/db.js');
 
 describe('Test topics logic module', () => {
     test('Get existing topic', () => {
-        var topic = db.get_topic_obj;
+        var topic = db.get_topic_obj();
         topic.id = 0;
         topic.title = 'Github';
         db.topics.push(topic);
@@ -15,11 +15,11 @@ describe('Test topics logic module', () => {
         expect(got).not.toBeNull();
         expect(got.id).toBe(0);
         // Get last element of collection - border case
-        var topic2 = db.get_topic_obj;
+        var topic2 = db.get_topic_obj();
         topic2.id = 1;
         topic2.title = 'API Design';
         db.topics.push(topic2);
-        var topic3 = db.get_topic_obj;
+        var topic3 = db.get_topic_obj();
         topic3.id = 2;
         topic3.title = 'Testing';
         db.topics.push(topic3);
@@ -53,7 +53,7 @@ describe('Test topics logic module', () => {
     });
 
     test('Validate valid topic', () => {
-        var topic = db.get_topic_obj;
+        var topic = db.get_topic_obj();
         topic.title = 'API Design';
         expect(topics_logic.validate_create(topic)).toBe(true);
         // It should not check for the id
@@ -66,7 +66,7 @@ describe('Test topics logic module', () => {
     test('Validate invalid topic', () => {
         expect(topics_logic.validate_create(null)).toBe(false);
         expect(topics_logic.validate_create(undefined)).toBe(false);
-        var topic = db.get_topic_obj;
+        var topic = db.get_topic_obj();
         topic.title = '';
         function call() {
             return topics_logic.validate_create(topic);
@@ -81,7 +81,7 @@ describe('Test topics logic module', () => {
     });
 
     test('Add valid topic', () => {
-        var topic = db.get_topic_obj;
+        var topic = db.get_topic_obj();
         topic.title = 'API Design';
         var added = topics_logic.add_topic(topic);
         expect(added).not.toBeUndefined();
@@ -91,7 +91,7 @@ describe('Test topics logic module', () => {
     });
 
     test('Add invalid topic', () => {
-        var topic = db.get_topic_obj;
+        var topic = db.get_topic_obj();
         topic.title = null;
         function add() {
             topics_logic.add_topic(topic);

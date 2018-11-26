@@ -1,6 +1,9 @@
 const express = require('express');
+const bodyparser = require('body-parser');
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(bodyparser.json());
 
 var tasks = require('./routes/tasks/tasks.js');
 var exams = require('./routes/exams/exams.js');
@@ -185,3 +188,5 @@ app.get('/v1/peer', (req,res) => {
 });
 
 app.listen(PORT, () => console.log('SE2-Project at port: '+ PORT));
+
+exports.app = app;

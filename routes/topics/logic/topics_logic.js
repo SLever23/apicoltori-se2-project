@@ -10,7 +10,7 @@ module.exports = {
             var new_index = db.topics.length;
             topic.id = new_index;
             db.topics.push(topic);
-            return topic;
+            return _.cloneDeep(topic);
         } else {
             throw 'Invalid topic';
         }
