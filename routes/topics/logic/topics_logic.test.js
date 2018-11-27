@@ -4,6 +4,8 @@
 const topics_logic = require('./topics_logic.js');
 const db = require('../../../db/db.js');
 
+afterAll(() => console.log('afterAll'));
+
 describe('Test topics logic module', () => {
     test('Get existing topic', () => {
         var topic = db.get_topic_obj();
