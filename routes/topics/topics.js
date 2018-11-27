@@ -6,7 +6,7 @@ module.exports = {
         var topic = req.body;
         try {
             topic = logic.add_topic(topic);
-            res.status(200).type('application/json').send(JSON.stringify(topic));
+            res.status(200).json(topic);
         } catch (e) {
             res.status(400).send(e);
         }
@@ -27,8 +27,7 @@ module.exports = {
             if (typeof topic == 'undefined') {
                 res.status(404).send('Not found');
             } else {
-                res.type('application/json').
-                    status(200).send(JSON.stringify(topic));
+                res.status(200).json(topic);
             }
         } catch (e) {
             res.status(400).send(e);
