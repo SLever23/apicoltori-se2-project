@@ -1,6 +1,25 @@
+const submission_logic = require('./logic/submissions_logic.js');
+const db = require('../../db/db.js');
+
+//const bodyParser = require('body-parser')
+//const api = require('../../api.js')
+//api.app.use(bodyParser.json())
+//api.app.use(bodyParser.urlencoded({ extended: true }));
+
 module.exports = {
     submissions_post: (req, res) => {
-        res.status(501).send('Coming soon!');
+        try {
+            //db.exams.push({id: 0});
+            //db.users.push({id: 0});
+            //db.tasks.push({id: 0});
+            let submission = submission_logic.submission_create(req.body);
+            res.status(201).json(submission);
+        } catch (error) {
+            if (error === 'Bad Request')
+                res.sendStatus(400);
+            else
+                res.sendStatus(500);
+        }
     },
 
     submissions_get: (req, res) => {
@@ -12,8 +31,20 @@ module.exports = {
     },
 
     submissions_id_get: (req, res) => {
-        res.status(501).send('Coming soon!');
-    }, 
+        try {
+            let submission = submission_logic.submission_get_by_id(req.params.id);
+            res.status(200).type()(submission);
+        } catch (error) {
+            if (error === 'Not Found') {
+                res.sendStatus(404);
+            }
+            else if (error === 'Bad Request') {
+                res.sendStatus(400);
+            }
+            else
+                res.sendStatus(500);
+        }
+    },
 
     submissions_id_delete: (req, res) => {
         res.status(501).send('Coming soon!');

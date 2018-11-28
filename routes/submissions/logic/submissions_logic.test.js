@@ -6,7 +6,7 @@ test('validation_create_submission', () => {
     db.users.push({ id: 0 })
     db.tasks.push({ id: 0 })
 
-    let submission = { examId: 0, userId: 0, taskId: 0, response: "response" };
+    let submission = { exam: 0, user: 0, task: 0, response: "response" };
 
     expect(submission_logic.validation_create_submission(submission)).toBe(true);
 });
@@ -64,7 +64,7 @@ test('Add valid submission ', () => {
     db.users.push({ id: 0 })
     db.tasks.push({ id: 0 })
 
-    let submission = { examId: 0, userId: 0, taskId: 0, response: "response" };
+    let submission = { exam: 0, user: 0, task: 0, response: "response" };
     let added = submission_logic.submission_create(submission);
 
     expect(typeof (added)).toBe('object');
@@ -75,17 +75,17 @@ test('Retrieve a submission that not exits or by wrong value', () => {
     function getnull() {
         return submission_logic.submission_get_by_id(null)
     }
-    expect(getnull).toThrow();
+    expect(getnull).toThrow('Bad Request');
 
     function getnotint() {
-        expect(submission_logic.submission_get_by_id('22')).toThrow();
+        expect(submission_logic.submission_get_by_id('ciao')).toThrow();
     }
-    expect(getnotint).toThrow();
+    expect(getnotint).toThrow('Bad Request');
 
     function getintnotvalue() {
         expect(submission_logic.submission_get_by_id(-23)).toThrow();
     }
-    expect(getintnotvalue).toThrow();
+    expect(getintnotvalue).toThrow('Not Found');
 
 });
 

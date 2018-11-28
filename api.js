@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
+//const bodyParser = require('body-parser');
 
 var tasks = require('./routes/tasks/tasks.js');
 var exams = require('./routes/exams/exams.js');
@@ -10,6 +11,9 @@ var submissions = require('./routes/submissions/submissions.js');
 var reviews = require('./routes/reviews/reviews.js');
 var topics = require('./routes/topics/topics.js');
 var peer = require('./routes/peer/peer.js');
+
+//app.use(bodyParser.json())
+//app.use(bodyParser.urlencoded({extended: true}));
 
 // ----------------------------------------------------------- //
 //////////////////////////// ROOT ///////////////////////////////

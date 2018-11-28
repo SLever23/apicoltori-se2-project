@@ -2,10 +2,10 @@ const db = require('../../../db/db.js');
 const _ = require('lodash');
 
 function validation_create_submission(submission) {
-    if (submission && Number.isInteger(submission.examId) && Number.isInteger(submission.userId) && Number.isInteger(submission.taskId) && typeof submission.response === 'string') {
-        if (_.find(db.exams, function (o) { return submission.examId == o.id })
-            && _.find(db.exams, function (o) { return submission.userId == o.id })
-            && _.find(db.exams, function (o) { return submission.taskId == o.id })) {
+    if (submission && Number.isInteger(+submission.exam) && Number.isInteger(+submission.user) && Number.isInteger(+submission.task) && typeof submission.response === 'string') {
+        if (_.find(db.exams, function (o) { return submission.exam == o.id })
+            && _.find(db.users, function (o) { return submission.user == o.id })
+            && _.find(db.tasks, function (o) { return submission.task == o.id })) {
             return true;
         }
         else
@@ -27,15 +27,16 @@ function submission_create(submission) {
 }
 
 function submission_get_by_id(id) {
-    if (Number.isInteger(id)) {
+    if (id !== null && Number.isInteger(+id)) {
         if (db.submissions[id] !== null && db.submissions[id] !== undefined) {
             return db.submissions[id];
         }
-        else
-            throw 'Not Found'
+        else {
+            throw 'Not Found';
+        }
     }
     else {
-        throw 'Not Found'
+        throw 'Bad Request';
     }
 }
 
