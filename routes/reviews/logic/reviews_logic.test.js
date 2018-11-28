@@ -7,17 +7,17 @@ test('Retrive valid reviews with all input ', () => {
     db.users.push({id: 2})
     db.tasks.push({id: 2})
 
-    db.reviews.push({examId: 2, userId: 2, taskId: 2});
+    db.reviews.push({exam: 2, user: 2, task: 2});
 
     let results = reviews_logic.reviews_get_all(2,2,2);
     expect(Array.isArray(results)).toBe(true);
     
     expect(results.length).toBe(1);
 
-    let correct = true;
+    let correct = false;
     results.forEach(element => {
-        if(!(element.examId == 2 && element.userId == 2 && element.taskId == 2)){
-            correct = false;
+        if(element.exam == 2 && element.user == 2 && element.task == 2){
+            correct = true;
         }
     });
     expect(correct).toBe(true);
@@ -31,7 +31,7 @@ test('Retrive valid reviews with input required ', () => {
 
     let correct = true;
     results.forEach(element => {
-        if(!(element.examId == 2 && element.userId == 2)){
+        if(!(element.exam == 2 && element.user == 2)){
             correct = false;
         }
     });
@@ -55,17 +55,7 @@ test('Retrive invalid reviews ', () => {
     expect(() => {reviews_logic.reviews_get_all("string", "string", "string")}).toThrow();
 
 });
-test('Retrive invalid reviews with parameters not found', () => {
 
-    expect(() => {reviews_logic.reviews_get_all(1, 1, 1)}).toThrow();
-
-    expect(() => {reviews_logic.reviews_get_all(0, 1, 1)}).toThrow();
-
-    expect(() => {reviews_logic.reviews_get_all(1, 0, 1)}).toThrow();
-
-    expect(() => {reviews_logic.reviews_get_all(1, 1, 0)}).toThrow();
-
-});
 test('Create invalid review ', () => {
     expect(() => {reviews_logic.reviews_create(null)}).toThrow();
 

@@ -3,16 +3,27 @@ const _ = require('lodash');
 
 module.exports = {
     reviews_get_all : (examId, userId, taskId) => {
-        let results = [];
-        if(input_found(db.exams, examId) && input_found(db.users, userId)){
-            results = _.filter(db.reviews, {examId: examId, userId: userId});
-            if((taskId != null) && input_found(db.tasks, taskId) ){
-                results = _.filter(results, {taskId: taskId});
-            }
-            return results;
-        } else {
-            throw new Error ('Not found')
+        if(examId == null || userId == null || isNaN(examId) || isNaN(userId)){
+            throw 'Invalid input';
         }
+        let results = [];
+        let g = db.reviews.forEach(element => {
+            if(element.exam == examId && element.user == userId){
+                results.push(element);
+            }
+        });
+        
+        if((taskId != null)){
+            if(isNaN(taskId)){
+                throw 'Invalid input';
+            }
+            let h = results.forEach(element => {
+                if(element.task != taskId){
+                    results.pop(element);
+                }
+            });
+        }
+        return results;
     },
     reviews_create : (review) => {
         if (validate_create(review)) {
@@ -24,14 +35,6 @@ module.exports = {
             throw 'Invalid review';
         }
     }
-}
-
-function input_found(db_array, id){
-    let result = false;
-    if( _.find(db_array, function(o) {return o.id === id})){
-        result = true;
-    }
-    return result;
 }
 function validate_create(review){
     let result = true;

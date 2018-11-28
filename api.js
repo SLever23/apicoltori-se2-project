@@ -195,3 +195,4 @@ if (process.env.NODE_ENV != 'test') {
 
 exports.up = isUp;
 exports.app = app;
+
