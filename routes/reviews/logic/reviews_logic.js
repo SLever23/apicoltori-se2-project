@@ -39,8 +39,8 @@ module.exports = {
 function validate_create(review){
     let result = true;
     if(review == null ||
-        ((review.examId == null) && (review.userId == null) && (review.taskId == null)) ||
-        ((review.examId instanceof String) && (review.userId instanceof String) && (review.taskId instanceof String))){
+        ((review.exam == null) && (review.user == null) && (review.task == null)) ||
+        ((review.exam instanceof String) && (review.user instanceof String) && (review.task instanceof String))){
         result = false;
     }
     return result;

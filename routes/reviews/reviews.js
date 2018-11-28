@@ -4,6 +4,7 @@ const logic = require('./logic/reviews_logic.js');
 module.exports = {
     reviews_post: (req, res) => {
         let review = req.body;
+        //console.log(review.id +" "+ review.exam + " "+ review.user + " "+ review.task + " "+ review.response);
         try {
             review = logic.reviews_create(review);
             res.status(200).json(review);
