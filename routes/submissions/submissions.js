@@ -1,11 +1,6 @@
 const submission_logic = require('./logic/submissions_logic.js');
 const db = require('../../db/db.js');
 
-//const bodyParser = require('body-parser')
-//const api = require('../../api.js')
-//api.app.use(bodyParser.json())
-//api.app.use(bodyParser.urlencoded({ extended: true }));
-
 module.exports = {
     submissions_post: (req, res) => {
         try {
@@ -33,7 +28,7 @@ module.exports = {
     submissions_id_get: (req, res) => {
         try {
             let submission = submission_logic.submission_get_by_id(req.params.id);
-            res.status(200).type()(submission);
+            res.status(200).json(submission);
         } catch (error) {
             if (error === 'Not Found') {
                 res.sendStatus(404);

@@ -40,13 +40,13 @@ function submission_get_by_id(id) {
     }
 }
 
-function sumbission_get_all(examId, userId, taskId) {
+/*function sumbission_get_all(examId, userId, taskId) {
     //return array of submissions
-}
+}*/
 
-function submission_edit(submission) {
+/*function submission_edit(submission) {
     return false;
-}
+}*/ 
 
 
 module.exports = { validation_create_submission, submission_create, submission_get_by_id };

@@ -2,7 +2,6 @@ const express = require('express');
 const bodyparser = require('body-parser');
 const app = express();
 const PORT = process.env.PORT || 3000;
-//const bodyParser = require('body-parser');
 
 app.use(bodyparser.json());
 
@@ -16,8 +15,6 @@ var topics = require('./routes/topics/topics.js');
 var peer = require('./routes/peer/peer.js');
 var isUp = false;
 
-//app.use(bodyParser.json())
-//app.use(bodyParser.urlencoded({extended: true}));
 
 // ----------------------------------------------------------- //
 //////////////////////////// ROOT ///////////////////////////////

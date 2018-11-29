@@ -1,24 +1,87 @@
 const submission = require('./submissions.js')
+const api = require('../../api.js');
+const request = require('supertest');
+const db = require('../../db/db.js');
+const app = api.app;
+var server;
+const v = '/v1';
 
-test ('Bad GET/id request', async () => {
-    //"test with id=null, id=string," 
-    //const response = await fetch('http://localhost:3000/submissions');
-    //expect(response.status).toBe('200');
-    //const json = await response.json();
-})
+beforeAll(() => {
+    let PORT = process.env.PORT || 3000;
+    server = app.listen(PORT, () => { });
+});
+afterAll(() => {
+    server.close();
+});
 
-test ('Submission with id not found by GET/id', async () => {
-    
-})
+describe('Test GET submissions/:id', () => {
+    test('Wrong id in GET/id request', async (done) => {
+        let id = 'aa';
+        let response = await request(app).get(v + '/submissions/' + id);
+        expect(response.status).toBe(400);
+        done();
+    })
 
-test ('Submission with id found by GET/id', async () => {
-    
-})
+    test('Id not found in Submissions by GET/id', async (done) => {
+        let id = -12;
+        let response = await request(app).get(v + '/submissions/' + id);
+        expect(response.status).toBe(404);
 
-test ('Submission invalid POST', async () => {
-    
-})
+        id = 321;
+        response = await request(app).get(v + '/submissions/' + id);
+        expect(response.status).toBe(404);
+        done();
+    })
 
-test ('Submission valid POST', async () => {
-    
-})
+    test('Id found in Submissions by GET/id', async (done) => {
+        db.submissions.push({id: 0, exam: 0, user: 0, task: 0, response: "response"});
+        let id=0;
+        let response = await request(app).get(v + '/submissions/' + id);
+        expect(response.status).toBe(200);
+        db.submissions.pop();
+        done();
+    })
+});
+
+describe('Test POST submissions', () => {
+    test('Submission invalid POST, invalid body/submission', async (done) => {
+        let response = await request(app).post(v + '/submissions/').set('Content-Type', 'application/json')
+            .set('Accept', 'application/json').send('ciao');
+        expect(response.status).toBe(400);
+        
+        response = await request(app).post(v + '/submissions/').set('Content-Type', 'application/json')
+            .set('Accept', 'application/json').send(null);
+        expect(response.status).toBe(400);
+
+        response = await request(app).post(v + '/submissions/').set('Content-Type', 'application/json')
+            .set('Accept', 'application/json').send({exam: 0, user: 0, task: 0, response: 344});
+        expect(response.status).toBe(400);
+
+        response = await request(app).post(v + '/submissions/').set('Content-Type', 'application/json')
+            .set('Accept', 'application/json').send({exam: 0, user: 'ciao', task: 0, response: 'ciao'});
+        expect(response.status).toBe(400);
+        done();
+    })
+
+    test('Submission invalid POST, invalid reference for the sumbission', async (done) => {
+        db.exams.push({id: 0});
+        db.tasks.push({id: 0});
+
+        let response = await request(app).post(v + '/submissions/').set('Content-Type', 'application/json')
+            .set('Accept', 'application/json').send({exam: 0, user: 0, task: 0, response: 'ciao'});
+        expect(response.status).toBe(400);
+        done();
+    })
+
+    test('Submission valid POST', async (done) => {
+        db.exams.push({id: 0});
+        db.users.push({id: 0});
+        db.tasks.push({id: 0});
+
+        let response = await request(app).post(v + '/submissions/').set('Content-Type', 'application/json')
+            .set('Accept', 'application/json').send({exam: 0, user: 0, task: 0, response: 'ciao'});
+        expect(response.status).toBe(201);
+        expect(response.body).toEqual({id:0, exam: 0, user: 0, task: 0, response: 'ciao'});
+        done();
+    })
+});
