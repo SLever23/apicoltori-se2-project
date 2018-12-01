@@ -14,7 +14,7 @@ module.exports = {
     },
     get_tasks: (searchkey) => {
         if (searchkey != null && searchkey != undefined && (typeof searchkey) === 'string') {
-            return db.tasks.find(function (element) { return element.title.includes(searchkey) || element.description.includes(searchkey); });
+            return db.tasks.find((element) => { return element.title.includes(searchkey) || element.description.includes(searchkey); });
         }
         else
             throw 'invalid searchkey';
@@ -22,36 +22,47 @@ module.exports = {
     get_task_by_id: (id) => {
         if (isNaN(id) || id < 0)
             throw 'id not valid';
+        else if (db.tasks[id] == undefined)
+            throw "task doesn't exist";
         else
             return db.tasks[id];
     },
     update_task: (task, id) => {
-        if (module.exports.validate_update(task)) {
-            db.tasks[id] = task; //da rivedere, non credo che funzioni
-        }
+        if (id != null && isFinite(id) && id >= 0 && db.tasks[id] != null && db.tasks[id] != undefined)
+            if (module.exports.validate_update(task)) {
+                task.id = id;
+                db.tasks[id] = task;
+            }
+            else
+                throw 'invalid task';
         else
-            throw 'invalid task';
+            throw 'invalid id';
     },
     delete_task: (id) => {
         if (isNaN(id) || id < 0)
             throw 'id not valid';
-        else
-            return;
-        //da rivedere, se lo elimino nel modo classico succede un disastro con gli id
+        else {
+            let elem = db.tasks.find((element) => { return element.id == id });
+            if (elem == undefined)
+                throw 'task not exist';
+            db.tasks.splice(db.tasks.indexOf(elem), id);
+        }
     },
 
-    validate_create: (task) => {//da finire
+    validate_create: (task) => {
         if (task == null || task == undefined || task.title == null || task.title == undefined || task.description == null || task.description == undefined || task.type == null || task.type == undefined)
             return false;
-        else if (isFinite(task.id) && task.id >= 0 && task.title.length > 0 && task.description.length > 0 && task.type.length > 0)
+        else if (task.title.length > 0 && task.description.length > 0 && task.type.length > 0)
             return true;
         else
             return false;
     },
-    validate_update: (task) => {// da finire
-        if (task == null || task == undefined)
+    validate_update: (task) => {
+        if (task == null || task == undefined || task.title == null || task.title == undefined || task.description == null || task.description == undefined || task.type == null || task.type == undefined)
             return false;
-        else
+        else if (task.title.length > 0 && task.description.length > 0 && task.type.length > 0)
             return true;
+        else
+            return false;
     }
 }
