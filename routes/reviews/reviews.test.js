@@ -135,3 +135,33 @@ describe('Test GET reviews/', () => {
     });
 
 });
+
+describe('Test GET reviews/id', () => {
+    // valid test
+    test('Success - Review valid GET with all input', async (done) => {
+        let response = await request(app).get(v + '/reviews/0').set('Content-Type', 'application/json')
+            .set('Accept', 'application/json').send();
+        expect(response.status).toBe(200);
+        done();
+    });
+    //invalid test
+    test('Not found - Review invalid GET id not found' , async (done) => {
+        let response = await request(app).get(v + '/reviews/3').set('Content-Type', 'application/json')
+            .set('Accept', 'application/json').send();
+        expect(response.status).toBe(404);
+        done();
+    });
+    test('Bad request- bad parameter in input ', async (done) => {
+        let response = await request(app).get(v + '/reviews/-2').set('Content-Type', 'application/json')
+            .set('Accept', 'application/json').send();
+        expect(response.status).toBe(400);
+        response = await request(app).get(v + '/reviews/null').set('Content-Type', 'application/json')
+            .set('Accept', 'application/json').send();
+        expect(response.status).toBe(400);
+        response = await request(app).get(v + '/reviews/ciao').set('Content-Type', 'application/json')
+            .set('Accept', 'application/json').send();
+        expect(response.status).toBe(400);
+        done();
+    });
+
+});

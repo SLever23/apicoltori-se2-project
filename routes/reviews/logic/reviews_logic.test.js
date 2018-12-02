@@ -2,6 +2,7 @@ const reviews_logic = require ('./reviews_logic.js');
 const db = require('../../../db/db.js');
 
 //valid eq. classes
+
 test('Retrive valid reviews with all input ', () => {
     db.exams.push({id: 2})
     db.users.push({id: 2})
@@ -10,7 +11,7 @@ test('Retrive valid reviews with all input ', () => {
     db.users.push({id: 2})
     db.tasks.push({id: 1})
 
-    db.reviews.push({exam: 2, user: 2, task: 2});
+    db.reviews.push({id: 0,exam: 2, user: 2, task: 2});
 
     let results = reviews_logic.reviews_get_all(2,2,2);
     expect(Array.isArray(results)).toBe(true);
@@ -55,6 +56,13 @@ test('Create valid review ', () => {
     expect(added.id).toBe(db.reviews.length - 1);
 
 });
+test('Retrive valid review by id ', () => {
+    let result = reviews_logic.review_get_by_id(0);
+    expect(result.id).toBe(0);
+    expect(result.exam).toBe(2);
+    expect(result.user).toBe(2);
+    expect(result.task).toBe(2);
+});
 //invalid eq. classes 
 test('Retrive invalid reviews ', () => {
     expect(() => {reviews_logic.reviews_get_all(null, null)}).toThrow();
@@ -82,3 +90,16 @@ test('Create invalid review ', () => {
     expect(() => {reviews_logic.reviews_create(review)}).toThrow();
 
 });
+test('Retrive invalid review by id ', () => {
+    expect(() => {reviews_logic.review_get_by_id(null)}).toThrow();
+
+    expect(() => {reviews_logic.review_get_by_id("ciao")}).toThrow();
+
+    expect(() => {reviews_logic.review_get_by_id(-1)}).toThrow(); 
+
+});
+
+test('Retrive invalid review by id with wrong reference', () => {
+    expect(() => {reviews_logic.review_get_by_id(10)}).toThrow(); 
+});
+

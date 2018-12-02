@@ -43,7 +43,19 @@ module.exports = {
     },
 
     reviews_id_get: (req, res) => {
-        res.status(501).send('Coming soon!');
+        try {
+            let reviewId = req.params.id;
+            let review = logic.review_get_by_id(reviewId);
+            res.status(200).json(review);
+        } catch (e) {
+            if (e === 'Not Found') {
+                res.sendStatus(404);
+            }
+            else if (e === 'Bad Request') {
+                res.sendStatus(400);
+            }
+        }
+        
     }, 
 
     reviews_id_delete: (req, res) => {

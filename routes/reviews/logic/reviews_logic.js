@@ -34,6 +34,23 @@ module.exports = {
         } else {
             throw 'Bad Request';
         }
+    },
+    review_get_by_id: (id) => {
+        if(id !== null && Number.isInteger(+id) && id >= 0){
+            if(found_id(id)){
+                let review = null;
+                let g = db.reviews.forEach(element => {
+                    if(element.id == id){
+                        review = element;
+                    }
+                });
+                return review;
+            }else{
+                throw 'Not Found'
+            }
+        }else{
+            throw 'Bad Request'
+        }
     }
 }
 function validate_create(review){
@@ -47,6 +64,14 @@ function validate_create(review){
                 return true;
             }
         }
+    }
+    return result;
+}
+function found_id(id){
+    let result = false;
+    if(_.find(db.reviews, function (o) { return id == o.id})){
+        console.log('find ok')
+        result = true;
     }
     return result;
 }
