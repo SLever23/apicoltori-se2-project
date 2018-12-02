@@ -6,6 +6,9 @@ test('Retrive valid reviews with all input ', () => {
     db.exams.push({id: 2})
     db.users.push({id: 2})
     db.tasks.push({id: 2})
+    db.exams.push({id: 1})
+    db.users.push({id: 2})
+    db.tasks.push({id: 1})
 
     db.reviews.push({exam: 2, user: 2, task: 2});
 
@@ -40,11 +43,15 @@ test('Retrive valid reviews with input required ', () => {
 });
 test('Create valid review ', () => {
 
-    let review = {examId: 1, userId: 1, taskId: 1}
+    let review = {exam: 1, user: 2, task: 1, response: 'response'};
     let added = reviews_logic.reviews_create(review);
 
     expect(added).not.toBeUndefined();
     expect(added).not.toBeNull();
+    expect(review.exam).toBe(1);
+    expect(review.user).toBe(2);
+    expect(review.task).toBe(1);
+    expect(review.response).toBe('response');
     expect(added.id).toBe(db.reviews.length - 1);
 
 });
@@ -59,13 +66,19 @@ test('Retrive invalid reviews ', () => {
 test('Create invalid review ', () => {
     expect(() => {reviews_logic.reviews_create(null)}).toThrow();
 
-    let review = {exam: "string", user: "string", task: "string"}
+    let review = {exam: "string", user: "string", task: "string", response: "response"}
     expect(() => {reviews_logic.reviews_create(review)}).toThrow();
 
-    review = {exam: 0, task: 0}
+    review = {exam: 0, user: null, task: 0, response: 'response'}
     expect(() => {reviews_logic.reviews_create(review)}).toThrow();
 
-    review = {user: 0, task: 0}
+    review = {exam: null, user: 0, task: 0, response: 'response'}
+    expect(() => {reviews_logic.reviews_create(review)}).toThrow();
+
+    review = {exam: 0, user: 0, task: null, response: 'response'}
+    expect(() => {reviews_logic.reviews_create(review)}).toThrow();
+    
+    review = {exam: 0, user: 0, task: 0, response: null}
     expect(() => {reviews_logic.reviews_create(review)}).toThrow();
 
 });

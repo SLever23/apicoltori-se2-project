@@ -1,31 +1,33 @@
 const db = require('../../db/db.js');
 const logic = require('./logic/reviews_logic.js');
 
+db.exams.push({id: 1});
+db.users.push({id: 1});
+db.tasks.push({id: 1});
+db.exams.push({id: 2});
+db.users.push({id: 2});
+db.tasks.push({id: 2});
+
 module.exports = {
     reviews_post: (req, res) => {
         let review = req.body;
-        //console.log(review.id +" "+ review.exam + " "+ review.user + " "+ review.task + " "+ review.response);
+
         try {
             review = logic.reviews_create(review);
-            res.status(200).json(review);
+            res.status(201).json(review);
         } catch (e) {
-            res.status(400).send(e);
+            if (e === 'Bad Request')
+                res.sendStatus(400);
         }
     },
 
     reviews_get: (req, res) => {
-        db.reviews[2] = {id: 2,exam: 2, user: 2, task: 2};
-        db.exams[2] = {id: 2};
-        db.users[2] = {id: 2};
-        db.tasks[2] = {id: 2};
-
         try {
             let examId = req.query.exam;
             let userId = req.query.user;
             let taskId = req.query.task;
             
             let reviews = logic.reviews_get_all(examId, userId, taskId);
-            
             if(reviews.length == 0) {
                 res.status(404).send('Not found');
             } else {
