@@ -51,6 +51,22 @@ module.exports = {
         }else{
             throw 'Bad Request'
         }
+    },
+    review_delete: (id) => {
+        if(id !== null && Number.isInteger(+id) && id >= 0){
+            if(found_id(id)){
+                for (let i = 0; i < db.reviews.length; i++) {
+                    if(db.reviews[i].id == id){
+                        db.reviews[i] = undefined;
+                    }
+                }
+                return true;
+            } else {
+                throw 'Not Found'
+            }
+        } else {
+            throw 'Bad Request'
+        }
     }
 }
 function validate_create(review){
@@ -69,8 +85,7 @@ function validate_create(review){
 }
 function found_id(id){
     let result = false;
-    if(_.find(db.reviews, function (o) { return id == o.id})){
-        console.log('find ok')
+    if(_.find(db.reviews, function (o) { return o !== undefined && id == o.id})){
         result = true;
     }
     return result;
