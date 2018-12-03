@@ -6,14 +6,6 @@ const app = api.app;
 var server;
 const v = '/v1';
 
-beforeAll(() => {
-    let PORT = process.env.PORT || 3000;
-    server = app.listen(PORT, () => {});
-});
-afterAll(() => {
-    server.close();
-});
-
 describe('Test GET topics/:id', () => {
 
     test('Bad request with non-number id', async (done) => {
@@ -118,6 +110,35 @@ describe('Test POST topics/', () => {
         expect(response.status).toBe(200);
         expect(response.body.id).toBe(db.topics.length - 1);
         expect(response.body.title).toBe(topic.title);
+        done();
+    });
+});
+
+describe('Test GET topics/', () => {
+
+    test('Bad request - payload is not empty', async (done) => {
+        let response = await request(app).get(v + '/topics/').send({topic: 'ciao'})
+            .set('Accept', 'application/json');
+        expect(response.status).toBe(400);
+        done();
+    });
+
+    test('Bad request - query params are not empty', async (done) => {
+        let response = await request(app).get(v + '/topics?query_param=true')
+            .set('Accept', 'application/json');
+        expect(response.status).toBe(400);
+        done();
+    });
+
+    test('Success', async (done) => {
+        let response = await request(app).get(v + '/topics/')
+            .set('Accept', 'application/json');
+        expect(response.status).toBe(200);
+        let f = response.body.forEach(element => {
+            expect(element).not.toBeNull();
+            expect(element).toEqual(db.topics[element.id]);
+        });
+        // expect(response.body).toEqual(db.topics);
         done();
     });
 });
