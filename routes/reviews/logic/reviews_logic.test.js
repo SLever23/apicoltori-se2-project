@@ -55,6 +55,8 @@ test('Create valid review ', () => {
     expect(review.response).toBe('response');
     expect(added.id).toBe(db.reviews.length - 1);
 
+    db.reviews.pop();
+    expect(db.reviews.length).toBe(1);
 });
 test('Retrive valid review by id ', () => {
     let result = reviews_logic.review_get_by_id(0);
@@ -63,6 +65,10 @@ test('Retrive valid review by id ', () => {
     expect(result.user).toBe(2);
     expect(result.task).toBe(2);
 });
+/*test('Delete valid review by id', () => {
+    let result = reviews_logic.review_delete(0);
+    expect(result).toBe(true);
+});*/
 //invalid eq. classes 
 test('Retrive invalid reviews ', () => {
     expect(() => {reviews_logic.reviews_get_all(null, null)}).toThrow();
@@ -102,4 +108,16 @@ test('Retrive invalid review by id ', () => {
 test('Retrive invalid review by id with wrong reference', () => {
     expect(() => {reviews_logic.review_get_by_id(10)}).toThrow(); 
 });
-
+test('Delete invalid review - bad parameters', () => {
+    expect(() => {reviews_logic.review_delete(-1)}).toThrow();
+    expect(() => {reviews_logic.review_delete(null)}).toThrow();
+    expect(() => {reviews_logic.review_delete('ciao')}).toThrow();
+});
+test('Delete invalid review - invalid reference', () => {
+    expect(() => {reviews_logic.review_delete(3)}).toThrow();
+});
+test('Found a review deleted', () => {
+    db.reviews.push({id: 1,exam: 2, user: 2, task: 2});
+    reviews_logic.review_delete(1);
+    expect(() => {reviews_logic.review_get_by_id(1)}).toThrow();
+});
