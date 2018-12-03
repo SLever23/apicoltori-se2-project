@@ -13,7 +13,14 @@ module.exports = {
     },
 
     topics_get: (req, res) => {
-        res.status(501).send('Coming soon!');
+        if (Object.entries(req.body).length !== 0) {
+            res.status(400).send('Request body must be empty');
+        } else if (Object.entries(req.query).length !== 0) {
+            res.status(400).send('Unnecessary query parameters specified');
+        } else {
+            let topics = logic.get_all_topics();
+            res.status(200).json(topics);
+        }
     },
 
     topics_id_put: (req, res) => {
