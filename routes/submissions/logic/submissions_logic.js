@@ -26,7 +26,7 @@ function submission_create(submission) {
 }
 
 function submission_get_by_id(id) {
-    if (id !== null && Number.isInteger(+id)) {
+    if (integer_check(id)) {
         if (db.submissions[id] !== null && db.submissions[id] !== undefined) {
             return db.submissions[id];
         }
@@ -34,9 +34,32 @@ function submission_get_by_id(id) {
             throw 'Not Found';
         }
     }
-    else {
-        throw 'Bad Request';
+    throw 'Bad Request';
+}
+
+function sumbission_delete(id) {
+    if(integer_check(id))
+    {
+        db.submissions.push({ id: 0, exam: 1, user: 1, task: 1, response: 'ciao' });
+        if(_.find(db.submissions, function(o) {return o!=undefined && o.id == id}))
+        {
+            db.submissions[id]=undefined;
+            return true;
+        }
+        else 
+            return false;
     }
+    throw 'Bad Request'
+}
+
+//prova con isNaN
+function integer_check(id)
+{
+    if(id!=null && id!=undefined && Number.isInteger(+id))
+    {
+        return true;
+    }
+    return false;
 }
 
 /*function sumbission_get_all(examId, userId, taskId) {
@@ -48,5 +71,5 @@ function submission_get_by_id(id) {
 }*/
 
 
-module.exports = { validation_create_submission, submission_create, submission_get_by_id };
+module.exports = { validation_create_submission, submission_create, submission_get_by_id, sumbission_delete};
 
