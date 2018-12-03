@@ -36,7 +36,11 @@ module.exports = {
      */
     get_all_topics: () => {
         // if (arguments.length != 0) throw 'Invalid argument';
-        return [...db.topics];
+        let res = [];
+        let f = db.topics.forEach(element => {
+            if (element != null && element != undefined) res.push(element);
+        });
+        return res;
     },
     
     /**

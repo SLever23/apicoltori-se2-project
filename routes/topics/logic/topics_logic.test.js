@@ -167,6 +167,10 @@ describe('Test add topic function', () => {
 
 describe('Test get all topics function', () => {
     test('Success', () => {
-        expect(topics_logic.get_all_topics()).toEqual(db.topics);
+        let arr = topics_logic.get_all_topics();
+        let f = arr.forEach(element => {
+            expect(element).not.toBeNull();
+            expect(element).toEqual(db.topics[element.id]);
+        });
     });
 });
