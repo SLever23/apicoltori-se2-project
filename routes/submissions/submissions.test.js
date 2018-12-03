@@ -8,7 +8,9 @@ const v = '/v1';
 
 beforeAll(() => {
     let PORT = process.env.PORT || 3000;
-    server = app.listen(PORT, () => { });
+    server = app.listen(PORT, () => {
+        console.log('Start server');
+    });
 });
 afterAll(() => {
     server.close();
