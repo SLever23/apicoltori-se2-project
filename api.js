@@ -1,6 +1,9 @@
 const express = require('express');
+const bodyparser = require('body-parser');
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(bodyparser.json());
 
 var tasks = require('./routes/tasks/tasks.js');
 var exams = require('./routes/exams/exams.js');
@@ -10,6 +13,8 @@ var submissions = require('./routes/submissions/submissions.js');
 var reviews = require('./routes/reviews/reviews.js');
 var topics = require('./routes/topics/topics.js');
 var peer = require('./routes/peer/peer.js');
+var isUp = false;
+
 
 // ----------------------------------------------------------- //
 //////////////////////////// ROOT ///////////////////////////////
@@ -183,5 +188,12 @@ app.delete('/v1/topics/:id', (req,res) => {
 app.get('/v1/peer', (req,res) => {
     peer.peer_get(req,res);
 });
+if (process.env.NODE_ENV != 'test') {
+    app.listen(PORT, () => {
+        console.log('SE2-Project at port: '+ PORT);
+    });
+}
 
-app.listen(PORT, () => console.log('SE2-Project at port: '+ PORT));
+exports.up = isUp;
+exports.app = app;
+

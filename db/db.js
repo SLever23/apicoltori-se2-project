@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 module.exports = {
     users:  [],
     user_obj: {
@@ -8,7 +10,7 @@ module.exports = {
         password: null
     },
     get_user_obj: () => {
-        return user_obj;
+        return _.cloneDeep(module.exports.user_obj);
     },
 
     tasks: [],
@@ -21,7 +23,7 @@ module.exports = {
         answers: []
     },
     get_task_obj: () => {
-        return task_obj;
+        return _.cloneDeep(module.exports.task_obj);
     },
     
     exams: [],
@@ -40,7 +42,7 @@ module.exports = {
         drawn_tasks: []
     },
     get_exam_obj: () => {
-        return exam_obj;
+        return _.cloneDeep(module.exports.exam_obj);
     },
 
     submissions: [],
@@ -53,7 +55,7 @@ module.exports = {
         response: null
     },
     get_submission_obj: () => {
-        return submission_obj;
+        return _.cloneDeep(module.exports.submission_obj);
     },
 
     reviews: [],
@@ -66,7 +68,7 @@ module.exports = {
         response: null
     },
     get_review_obj: () => {
-        return review_obj;
+        return _.cloneDeep(module.exports.review_obj);
     },
 
     topics: [],
@@ -75,7 +77,7 @@ module.exports = {
         title: null
     },
     get_topic_obj: () => {
-        return topic_obj;
+        return _.cloneDeep(module.exports.topic_obj);
     },
 
     classes: [],
@@ -85,7 +87,7 @@ module.exports = {
         students: []
     },
     get_class_obj: () => {
-        return class_obj;
+        return _.cloneDeep(module.exports.class_obj);
     },
 
     tokens: [],
