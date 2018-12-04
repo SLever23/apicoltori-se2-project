@@ -7,6 +7,7 @@ module.exports = {
             //db.exams.push({id: 0});
             //db.users.push({id: 0});
             //db.tasks.push({id: 0});
+            //console.log(typeof req.body.exam); type number if correct
             let submission = submission_logic.submission_create(req.body);
             res.status(201).json(submission);
         } catch (error) {
@@ -16,7 +17,8 @@ module.exports = {
     },
 
     submissions_get: (req, res) => {
-        res.status(501).send('Coming soon!');
+        console.log(req.query.id)
+        console.log(typeof req.query.id); 
     },
 
     submissions_id_put: (req, res) => {
@@ -25,6 +27,7 @@ module.exports = {
 
     submissions_id_get: (req, res) => {
         try {
+            //console.log(typeof req.params.id); type string if correct
             let submission = submission_logic.submission_get_by_id(req.params.id);
             res.status(200).json(submission);
         } catch (error) {

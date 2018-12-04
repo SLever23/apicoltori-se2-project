@@ -2,7 +2,7 @@ const db = require('../../../db/db.js');
 const _ = require('lodash');
 
 function validation_create_submission(submission) {
-    if (submission && Number.isInteger(+submission.exam) && Number.isInteger(+submission.user) && Number.isInteger(+submission.task) && typeof submission.response === 'string') {
+    if (submission && Number.isInteger(submission.exam) && Number.isInteger(submission.user) && Number.isInteger(submission.task) && typeof submission.response === 'string') {
         if (!(_.find(db.submissions, function (o) { return submission.exam == o.exam && submission.user == o.user && submission.task == o.task }))) {
             if (_.find(db.exams, function (o) { return submission.exam == o.id })
                 && _.find(db.users, function (o) { return submission.user == o.id })
@@ -61,14 +61,31 @@ function integer_check(id)
     return false;
 }
 
-/*function sumbission_get_all(examId, userId, taskId) {
-    //return array of submissions
-}*/
+function sumbission_get_all(userId, examId, taskId) {
+    let result = [];
+    if (arguments.length==2 && Number.isInteger(+examId) && Number.isInteger(+userId)) {
+        db.submissions.forEach(element => {
+            if (element.exam == examId && element.user == userId) {
+                result.push(element);
+            }
+        })
+        return result;
+    }
+    else if(arguments.length==3 && Number.isInteger(+examId) && Number.isInteger(+userId) && Number.isInteger(+taskId)) {
+        db.submissions.forEach(element => {
+            if (element.exam == examId && element.user == userId && element.task==taskId) {
+                result.push(element);
+            }
+        })
+        return result;
+    }
+    else
+        throw 'Bad Request'
+}
 
 /*function submission_edit(submission) {
     return false;
 }*/
 
-
-module.exports = { validation_create_submission, submission_create, submission_get_by_id, sumbission_delete};
+module.exports = { validation_create_submission, submission_create, submission_get_by_id, sumbission_get_all, sumbission_delete};
 
