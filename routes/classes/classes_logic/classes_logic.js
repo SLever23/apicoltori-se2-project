@@ -11,23 +11,7 @@ module.exports = {
     
     get_class: (exam) => {
 
-        if (module.exports.validate_id(exam.id)) {
-
-            if (db.classes[exam.class] == null) {
-
-                throw 'No matching class';
-
-            } else {
-
-                return db.classes[exam.class];
-
-            }
-
-        } else {
-
-            throw 'Invalid exam id';
-
-        }
+        return db.classes
         
     },
     

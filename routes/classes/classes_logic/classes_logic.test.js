@@ -8,31 +8,13 @@ describe('Test classes logic module', () => {
 
     test('Get correct_class', () => {
 
-        var exam = db.get_exam_obj();
-        var clas = db.get_class_obj();
-        clas.id = 0;
-        exam.id = 0;
-        exam.class = clas.id;
-        db.classes[clas.id] = clas;
-        db.exams[exam.id] = exam;
-        var valid = classes_logic.get_class(exam);
-        expect(valid).toBe(clas);
-
-    });
-
-
-    
-    test('Get wrong_class', () => {
-
-        var exam = db.get_exam_obj();
-        exam.id = 0;
-        db.exams[exam.id] = exam;
-        let valid = () => { 
-
-            classes_logic.get_class(exam);
-
+        var clas = [db.get_class_obj(), db.get_class_obj(), db.get_class_obj()];
+        for(var i = 0; i < 3; i++) {
+            clas[i].id = i;
+            db.classes[i] = clas[i];
         }
-        expect(valid).toThrow();
+        var valid = classes_logic.get_class();
+        expect(valid).toEqual(clas);
 
     });
 
@@ -52,10 +34,14 @@ describe('Test classes logic module', () => {
 
     test('Validate wrong_create_class', () => {
 
-        var clas = db.get_class_obj();
+        var clas;
+        var valid = classes_logic.validate_create(clas);
+        expect(valid).toBe(false);
+        
+        clas = db.get_class_obj();
         clas.name = 0;
         clas.students = [0, 1, 2];
-        var valid = classes_logic.validate_create(clas);
+        valid = classes_logic.validate_create(clas);
         expect(valid).toBe(false);
 
         clas.name = [0, 1, 2];
@@ -63,19 +49,22 @@ describe('Test classes logic module', () => {
         valid = classes_logic.validate_create(clas);
         expect(valid).toBe(false);
 
-        clas.name = 'NomdeDelCorso';
-        clas.students = ['a', 'b', 'c'];
-        valid = classes_logic.validate_create(clas);
+    });
+
+
+
+    test('Validate wrong_students_array',() => {
+
+        var students = ['a', 'b', 'c'];
+        var valid = classes_logic.validate_array(students);
         expect(valid).toBe(false);
 
-        clas.name = 'NomdeDelCorso';
-        clas.students = 0;
-        valid = classes_logic.validate_create(clas);
+        students = 0;
+        valid = classes_logic.validate_array(students);
         expect(valid).toBe(false);
 
-        clas.name = 'NomdeDelCorso';
-        clas.students = 'ciao';
-        valid = classes_logic.validate_create(clas);
+        students = 'ciao';
+        valid = classes_logic.validate_array(students);
         expect(valid).toBe(false);
 
     });
