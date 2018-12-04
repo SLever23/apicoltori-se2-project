@@ -2,17 +2,15 @@ const reviews_logic = require ('./reviews_logic.js');
 const db = require('../../../db/db.js');
 
 //valid eq. classes
+db.exams.push({id: 2})
+db.users.push({id: 2})
+db.tasks.push({id: 2})
+db.exams.push({id: 1})
+db.users.push({id: 2})
+db.tasks.push({id: 1})
+db.reviews.push({id: 0,exam: 2, user: 2, task: 2});
 
 test('Retrive valid reviews with all input ', () => {
-    db.exams.push({id: 2})
-    db.users.push({id: 2})
-    db.tasks.push({id: 2})
-    db.exams.push({id: 1})
-    db.users.push({id: 2})
-    db.tasks.push({id: 1})
-
-    db.reviews.push({id: 0,exam: 2, user: 2, task: 2});
-
     let results = reviews_logic.reviews_get_all(2,2,2);
     expect(Array.isArray(results)).toBe(true);
     
@@ -25,7 +23,7 @@ test('Retrive valid reviews with all input ', () => {
         }
     });
     expect(correct).toBe(true);
-
+    
 });
 test('Retrive valid reviews with input required ', () => {
     let results = reviews_logic.reviews_get_all(2,2);
@@ -65,10 +63,11 @@ test('Retrive valid review by id ', () => {
     expect(result.user).toBe(2);
     expect(result.task).toBe(2);
 });
-/*test('Delete valid review by id', () => {
-    let result = reviews_logic.review_delete(0);
+test('Delete valid review by id', () => {
+    db.reviews.push({id: 1,exam: 2, user: 2, task: 2});
+    let result = reviews_logic.review_delete(1);
     expect(result).toBe(true);
-});*/
+});
 //invalid eq. classes 
 test('Retrive invalid reviews ', () => {
     expect(() => {reviews_logic.reviews_get_all(null, null)}).toThrow();
@@ -109,15 +108,15 @@ test('Retrive invalid review by id with wrong reference', () => {
     expect(() => {reviews_logic.review_get_by_id(10)}).toThrow(); 
 });
 test('Delete invalid review - bad parameters', () => {
-    expect(() => {reviews_logic.review_delete(-1)}).toThrow();
     expect(() => {reviews_logic.review_delete(null)}).toThrow();
     expect(() => {reviews_logic.review_delete('ciao')}).toThrow();
 });
 test('Delete invalid review - invalid reference', () => {
-    expect(() => {reviews_logic.review_delete(3)}).toThrow();
+    expect(reviews_logic.review_delete(-1)).toBe(false);
+    expect(reviews_logic.review_delete(3)).toBe(false);
 });
 test('Found a review deleted', () => {
-    db.reviews.push({id: 1,exam: 2, user: 2, task: 2});
-    reviews_logic.review_delete(1);
-    expect(() => {reviews_logic.review_get_by_id(1)}).toThrow();
+    db.reviews.push({id: 4,exam: 2, user: 2, task: 2});
+    reviews_logic.review_delete(4);
+    expect(() => {reviews_logic.review_get_by_id(4)}).toThrow();
 });

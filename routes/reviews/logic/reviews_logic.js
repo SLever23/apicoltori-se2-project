@@ -53,16 +53,12 @@ module.exports = {
         }
     },
     review_delete: (id) => {
-        if(id !== null && Number.isInteger(+id) && id >= 0){
+        if(id !== null && Number.isInteger(+id) && id !=undefined){
             if(found_id(id)){
-                for (let i = 0; i < db.reviews.length; i++) {
-                    if(db.reviews[i].id == id){
-                        db.reviews[i] = undefined;
-                    }
-                }
+                db.reviews[id] = undefined;
                 return true;
             } else {
-                throw 'Not Found'
+                return false;
             }
         } else {
             throw 'Bad Request'
