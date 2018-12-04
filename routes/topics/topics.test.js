@@ -1,18 +1,9 @@
-const topics = require('./topics.js');
 const api = require('../../api.js');
 const request = require('supertest');
 const db = require('../../db/db.js');
 const app = api.app;
-var server;
-const v = '/v1';
 
-beforeAll(() => {
-    let PORT = process.env.PORT || 3000;
-    server = app.listen(PORT, () => {});
-});
-afterAll(() => {
-    server.close();
-});
+const v = '/v1';
 
 describe('Test GET topics/:id', () => {
 
