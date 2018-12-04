@@ -1,4 +1,4 @@
-module.exports = {
+/*module.exports = {
     classes_post: (req, res) => {
         res.status(501).send('Coming soon!');
     },
@@ -18,4 +18,4 @@ module.exports = {
     classes_id_delete: (req, res) => {
         res.status(501).send('Coming soon!');
     }
-}
+}*/
