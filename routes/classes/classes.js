@@ -1,4 +1,4 @@
-/*const db = require('../../db/db.js');
+const db = require('../../db/db.js');
 
 const logic = require('./classes_logic/classes_logic.js');
 
@@ -12,7 +12,7 @@ module.exports = {
 
     classes_get: (req, res) => {
 
-        res.status(501).send('Coming soon!');
+        res.status(200).json(db.classes);
 
     },
 
@@ -23,7 +23,7 @@ module.exports = {
 
         try {
 
-            clas = logic.add_clas(clas);
+            clas = logic.add_class(clas);
             res.status(201).json(clas);
 
         } catch (e) {
@@ -41,14 +41,14 @@ module.exports = {
 
             var id = req.params.id;
             var clas = logic.get_class_by_id(id);
-            res.status(200).json(clas);
+            res.status(200).send(clas);
 
         } catch (e) {
 
-            res.status(401).send(e);
+            res.status(404).send(e);
 
         }
 
     }, 
 
-}*/
+}
