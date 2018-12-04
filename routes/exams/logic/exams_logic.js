@@ -97,7 +97,7 @@ module.exports = {
      * Retrieves a topic from the topics collection in db
      */
     get_by_id: (id) => {
-        if (id !== parseInt(id, 10)) {
+        if (!Number.isInteger(id)) {
             throw 'Id not an integer';
         } else if (id < 0) {
             throw 'Id not positive';

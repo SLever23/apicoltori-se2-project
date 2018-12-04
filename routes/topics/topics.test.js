@@ -83,7 +83,6 @@ describe('Test POST topics/', () => {
             .set('Content-Type', 'application/json')
             .set('Accept', 'application/json');
         expect(response.status).toBe(400);
-        expect(response.status).toBe(400);
         done();
     });
 

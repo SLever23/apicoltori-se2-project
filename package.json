@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node api.js",
     "nodemon": "nodemon api.js",
-    "test": "jest --detectOpenHandles"
+    "test": "jest"
   },
   "jest": {
     "verbose": true,
@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "jest": "^23.6.0",
+    "node-fetch": "^2.3.0",
     "supertest": "^3.3.0"
   }
 }
