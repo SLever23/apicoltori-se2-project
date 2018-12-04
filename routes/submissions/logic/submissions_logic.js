@@ -40,7 +40,6 @@ function submission_get_by_id(id) {
 function sumbission_delete(id) {
     if(integer_check(id))
     {
-        db.submissions.push({ id: 0, exam: 1, user: 1, task: 1, response: 'ciao' });
         if(_.find(db.submissions, function(o) {return o!=undefined && o.id == id}))
         {
             db.submissions[id]=undefined;

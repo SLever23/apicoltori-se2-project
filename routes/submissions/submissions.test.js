@@ -11,12 +11,14 @@ const PORT = process.env.PORT || 3000;
 
 const SERVER_URL = process.env.SERVER_URL || 'http://localhost:' + PORT + '/v1/submissions';
 
-db.exams.push({ id: 0 });
-db.users.push({ id: 0 });
-db.tasks.push({ id: 0 });
-db.exams.push({ id: 1 });
-db.users.push({ id: 1 });
-db.tasks.push({ id: 1 });
+beforeAll(function () {
+    db.exams.push({ id: 0 });
+    db.users.push({ id: 0 });
+    db.tasks.push({ id: 0 });
+    db.exams.push({ id: 1 });
+    db.users.push({ id: 1 });
+    db.tasks.push({ id: 1 });
+})
 
 describe('Test GET submissions/:id', () => {
     //not correct
@@ -123,48 +125,38 @@ describe('Test POST submissions', () => {
     })
 });
 
-function deletesubmission(id) {
-    return fetch(SERVER_URL + '/' + id, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        }
-    })
-}
+describe('Test DELETE Submission', () => {
 
-//Da sistemare, risulta corretto sempre
-/*describe('Test DELETE Submission', () => {
-    //db.submissions.push({id: 0, exam: 1, user: 1, task: 1, response: 'ciao' });
-
-    test('test invalid id for DELETE submission', () => {
-        deletesubmission(null)
-            .then(response => {
-                expect(response.status).toBe(200);
-            })
-
-        deletesubmission('aa')
-            .then(response => {
-                expect(response.status).toBe(400);
-            })
+    test('test invalid id for DELETE submission', async (done) => {
+        let id=null;
+        let response = await request(app).delete(v + '/submissions/' + id);
+        expect(response.status).toBe(400);
+        id='aa';
+        response = await request(app).delete(v + '/submissions/' + id);
+        expect(response.status).toBe(400);
+        done();
     })
 
-    test('test inexistent id for DELETE submission', () => {
-        deletesubmission(-23)
-            .then(response => {
-                expect(response.status).toBe(404);
-            })
-
-        deletesubmission(123)
-            .then(response => {
-                expect(response.status).toBe(404);
-            })
+    test('test inexistent id for DELETE submission', async (done) => {
+        //-23, 123
+        let id=-23;
+        let response = await request(app).delete(v + '/submissions/' + id);
+        expect(response.status).toBe(404);
+        id=123;
+        response = await request(app).delete(v + '/submissions/' + id);
+        expect(response.status).toBe(404);
+        done();
     })
 
-    test('test valid DELETE submission', () => {
-        deletesubmission(0)
-            .then(response => {
-                expect(response.status).toBe(204);
-            })
+    test('test valid DELETE not found submission', async (done) => {
+        db.submissions.push({ id: 0, exam: 0, user: 0, task: 0, response: "response" });
+        let id=0;
+        let response = await request(app).delete(v + '/submissions/' + id);
+        expect(response.status).toBe(204);
+
+        response = await request(app).get(v + '/submissions/' + id);
+        expect(response.status).toBe(404);
+
+        done();
     })
-});*/
+});
