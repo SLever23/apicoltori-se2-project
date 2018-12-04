@@ -14,10 +14,10 @@ module.exports = {
     },
     get_tasks: (searchkey) => {
         if (searchkey != null && searchkey != undefined && (typeof searchkey) === 'string') {
-            return db.tasks.find((element) => { return element.title.includes(searchkey) || element.description.includes(searchkey); });
+            return db.tasks.filter((element) => { return element.title.includes(searchkey) || element.description.includes(searchkey); });
         }
         else
-            throw 'invalid searchkey';
+            return [];
     },
     get_task_by_id: (id) => {
         if (isNaN(id) || id < 0)
@@ -30,7 +30,7 @@ module.exports = {
     update_task: (task, id) => {
         if (id != null && isFinite(id) && id >= 0 && db.tasks[id] != null && db.tasks[id] != undefined)
             if (module.exports.validate_update(task)) {
-                task.id = id;
+                task.id = parseInt(id);
                 db.tasks[id] = task;
             }
             else
@@ -45,7 +45,7 @@ module.exports = {
             let elem = db.tasks.find((element) => { return element.id == id });
             if (elem == undefined)
                 throw 'task not exist';
-            db.tasks.splice(db.tasks.indexOf(elem), id);
+            db.tasks[id] = undefined;
         }
     },
 
