@@ -6,17 +6,13 @@ module.exports = {
             let task = logic.add_task(req.body);
             res.status(201).json(task);
         } catch (e) {
-            res.status(500).send(e);
+            res.status(e.status).send(e.text);
         }
     },
 
     tasks_get: (req, res) => {
-        try {
-            let tasks = logic.get_tasks(req.query.searchkey);
-            res.status(200).json(tasks);
-        } catch (e) {
-            res.status(400).send(e);
-        }
+        let tasks = logic.get_tasks(req.query.searchkey);
+        res.status(200).json(tasks);
     },
 
     tasks_id_put: (req, res) => {
@@ -24,7 +20,7 @@ module.exports = {
             logic.update_task(req.body, req.params.id);
             res.status(204).send();
         } catch (e) {
-            res.status(500).send(e);
+            res.status(e.status).send(e.text);
         }
     },
 
@@ -33,7 +29,7 @@ module.exports = {
             let task = logic.get_task_by_id(req.params.id);
             res.status(200).json(task);
         } catch (e) {
-            res.status(404).send(e)
+            res.status(e.status).send(e.text);
         }
     },
 
@@ -42,7 +38,7 @@ module.exports = {
             logic.delete_task(req.params.id);
             res.status(204).send();
         } catch (e) {
-            res.status(404).send();
+            res.status(e.status).send(e.text);
         }
     }
 }
