@@ -34,7 +34,7 @@ describe('Test POST users/', () => {
 
     test('Bad request - user is null', async (done) => {
 
-        let user = db.get_user_obj;
+        let user = db.get_user_obj();
 
         let response = await request(app).post(v + '/users/').set('Content-Type', 'application/json')
 
@@ -50,7 +50,7 @@ describe('Test POST users/', () => {
 
     test('Bad request - user.name is not string', async (done) => {
 
-        let user = db.get_user_obj;
+        let user = db.get_user_obj();
 
         user.name = 123;
 
@@ -70,7 +70,7 @@ describe('Test POST users/', () => {
 
     test('Bad request - user.name has numbers in the string', async (done) => {
 
-        let user = db.get_user_obj;
+        let user = db.get_user_obj();
 
         user.name = 'Tiziano123';
 
@@ -89,7 +89,7 @@ describe('Test POST users/', () => {
 
     test('Bad request - user.surname is not string', async (done) => {
 
-        let user = db.get_user_obj;
+        let user = db.get_user_obj();
 
         user.surname = 123;
 
@@ -109,7 +109,7 @@ describe('Test POST users/', () => {
 
     test('Bad request - user.surname has numbers in the string', async (done) => {
 
-        let user = db.get_user_obj;
+        let user = db.get_user_obj();
 
         user.surname = 'Caiano123';
 
@@ -129,7 +129,7 @@ describe('Test POST users/', () => {
 
     test('Bad request - user.email has no dot at the end', async (done) => {
 
-        let user = db.get_user_obj;
+        let user = db.get_user_obj();
 
         user.email = 'tizio.caio@semprognocom';
 
@@ -148,7 +148,7 @@ describe('Test POST users/', () => {
 
     test('Bad request - user.email has two consecutive dots', async (done) => {
 
-        let user = db.get_user_obj;
+        let user = db.get_user_obj();
 
         user.email = 'tizio..caio@semprogno.com';
 
@@ -168,7 +168,7 @@ describe('Test POST users/', () => {
 
     test('Bad request - user.email is not an email', async (done) => {
 
-        let user = db.get_user_obj;
+        let user = db.get_user_obj();
 
         user.email = 'ciaociao';
 
@@ -188,7 +188,7 @@ describe('Test POST users/', () => {
 
     test('Bad request - user.email is not a string ', async (done) => {
 
-        let user = db.get_user_obj;
+        let user = db.get_user_obj();
 
         user.email = 0;
 
@@ -208,7 +208,7 @@ describe('Test POST users/', () => {
 
     test('Bad request - user.password is not a string', async (done) => {
 
-        let user = db.get_user_obj;
+        let user = db.get_user_obj();
 
         user.password = 0;
 
@@ -296,12 +296,11 @@ describe('Test GET users/:id', () => {
 
         let response = await request(app).get(v + '/users/' + id);
 
-        expect(response.status).toBe(401);
+        expect(response.status).toBe(404);
 
         done();
 
     });
-
 
 
     test('Bad request with negative id', async (done) => {
@@ -310,7 +309,7 @@ describe('Test GET users/:id', () => {
 
         let response = await request(app).get(v + '/users/' + id);
 
-        expect(response.status).toBe(401);
+        expect(response.status).toBe(404);
 
         done();
 
