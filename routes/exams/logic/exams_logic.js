@@ -4,42 +4,39 @@ const moment = require('moment');
 
 var formats = [
     moment.ISO_8601,
+    'DD/MM/YY,HH:mm:ss',
     "DD/MM/YYYY  :)  HH*mm*ss"
 ];
 
-var valid_task_pool = (task_pool) => {
-    if (task_pool.some((v) => { !Integer.isInteger(v.id_topic) || v.id_topic < 0 }))
+var valid_date = (date) => {
+    if ((typeof date) != 'string' && !(date instanceof String) ||
+    date.length <= 0 || !moment(date, formats, true).isValid()) {
         return false;
-
-    if (task_pool.some((v) => { db.topics[v.id_topic] == undefined }))
-        return false;
-
-    return true;
+    } else { 
+        return true;
+    }
 }
 
 var validate_create = (exam) => {
-    // 'exam != null' checks for both null and undefined
-    if (exam == null) throw 'Delivery deadline not valid'
+    // checks for both null and undefined
+    if (exam == null) throw 'Exam cannot be null';
 
     if ((typeof exam.title) != 'string' && !(exam.title instanceof String) ||
         exam.title.length <= 0)
-        throw 'Title not valid'
+        throw 'Title not valid';
 
-    if ((typeof exam.deadline_delivery) != 'string' && !(exam.deadline_delivery instanceof String) ||
-        exam.deadline_delivery.length <= 0 || !moment(exam.deadline_delivery, formats, true).isValid())
-        throw 'Delivery deadline not valid'
+    if (!valid_date(exam.deadline_delivery))
+        throw 'Delivery deadline not valid';
         
-    if ((typeof exam.deadline_review) != 'string' && !(exam.deadline_review instanceof String) ||
-        exam.deadline_review.length <= 0 || !moment(exam.deadline_review, formats, true).isValid())
-        throw 'Review deadline not valid'
+    if (!valid_date(exam.deadline_review))
+        throw 'Review deadline not valid';
 
-    if ((typeof exam.start_date) != 'string' && !(exam.start_date instanceof String) ||
-        exam.start_date.length <= 0 || !moment(exam.start_date, formats, true).isValid())
-        throw 'Start date not valid'
+    if (!valid_date(exam.start_date))
+        throw 'Start date not valid';
 
     if ((typeof exam.type) != 'string' && !(exam.type instanceof String) ||
         exam.type.length <= 0 || (exam.type !== 'Exam' && exam.type !== 'Crowdsourcing'))
-        throw 'Exam type not valid'
+        throw 'Exam type not valid';
 
     if (exam.class != null) {
         if (isNaN(exam.class) || !Number.isInteger(exam.class) || exam.class < 0 || db.classes[exam.class] == undefined) {
@@ -80,7 +77,7 @@ var validate_create = (exam) => {
 
 module.exports = {
     /**
-     * Adds a topic to the topics collection in db and returns the topic with its id set
+     * Adds an exam to the exams collection in db and returns the exam with its id set
      */
     add_exam: (exam) => {
         if (validate_create(exam)) {
@@ -94,7 +91,7 @@ module.exports = {
     },
 
     /**
-     * Retrieves a topic from the topics collection in db
+     * Retrieves an exam from the exams collection in db
      */
     get_by_id: (id) => {
         if (!Number.isInteger(id)) {
