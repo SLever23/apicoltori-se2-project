@@ -188,12 +188,11 @@ app.delete('/v1/topics/:id', (req,res) => {
 app.get('/v1/peer', (req,res) => {
     peer.peer_get(req,res);
 });
-if (process.env.NODE_ENV != 'test') {
-    app.listen(PORT, () => {
+
+if (!module.parent) {
+    var server = app.listen(PORT, () => {
         console.log('SE2-Project at port: '+ PORT);
     });
 }
 
-exports.up = isUp;
-exports.app = app;
-
+module.exports.app = app;

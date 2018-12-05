@@ -4,8 +4,6 @@
 const topics_logic = require('./topics_logic.js');
 const db = require('../../../db/db.js');
 
-afterAll(() => console.log('afterAll'));
-
 let call = (funct, argument) => {
     let f = () => { funct(argument) };
     return f;

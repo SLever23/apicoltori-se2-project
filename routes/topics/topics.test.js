@@ -1,9 +1,8 @@
-const topics = require('./topics.js');
 const api = require('../../api.js');
 const request = require('supertest');
 const db = require('../../db/db.js');
 const app = api.app;
-var server;
+
 const v = '/v1';
 
 describe('Test GET topics/:id', () => {
@@ -83,7 +82,6 @@ describe('Test POST topics/', () => {
         let response = await request(app).post(v + '/topics/').send(null)
             .set('Content-Type', 'application/json')
             .set('Accept', 'application/json');
-        expect(response.status).toBe(400);
         expect(response.status).toBe(400);
         done();
     });

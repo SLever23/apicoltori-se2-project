@@ -1,3 +1,17 @@
-test ("first test for travis", () => {
-    expect(1).toBe(1);
+const api = require('./api.js');
+const app = api.app;
+var server;
+
+const PORT = process.env.PORT || 3000;
+
+beforeAll(() => {
+    server = app.listen(PORT);
+})
+
+
+afterAll(() => {
+    server.close();
+})
+
+test('Simple test', () => {
 })
