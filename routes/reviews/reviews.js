@@ -59,6 +59,17 @@ module.exports = {
     }, 
 
     reviews_id_delete: (req, res) => {
-        res.status(501).send('Coming soon!');
+        try {
+            let reviewId = req.params.id;
+            if(logic.review_delete(reviewId)){
+                res.sendStatus(204);
+            }else {
+                res.sendStatus(404);
+            }
+        } catch (e) {
+            if (e === 'Bad Request') {
+                res.sendStatus(400);
+            }
+        }
     }
 }
