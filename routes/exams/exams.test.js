@@ -114,7 +114,6 @@ describe('Test POST /exams with wrong parameter number',  () => {
 describe('Test POST exams/', () => {
     test('Get status 201 posting valid exam', async (done) => {
         let exam = get_valid_exam();
-        console.table(exam);
         let response = await supertest(app).post(v + '/exams')
             .set('Content-Type', 'application/json')
             .set('Accept', 'application/json').send(exam);
