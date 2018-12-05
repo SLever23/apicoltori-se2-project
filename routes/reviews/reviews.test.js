@@ -6,13 +6,16 @@ const app = api.app;
 var server;
 const v = '/v1';
 
-db.reviews.push({id:0, exam: 1, user: 1, task: 1, response: 'response'});
-db.exams.push({id: 1});
-db.users.push({id: 1});
-db.tasks.push({id: 1});
-db.exams.push({id: 2});
-db.users.push({id: 2});
-db.tasks.push({id: 2});
+beforeAll(function () {
+    db.reviews.push({id:0, exam: 1, user: 1, task: 1, response: 'response'});
+    db.exams.push({id: 1});
+    db.users.push({id: 1});
+    db.tasks.push({id: 1});
+    db.exams.push({id: 2});
+    db.users.push({id: 2});
+    db.tasks.push({id: 2});
+})
+
 
 describe('Test POST reviews/', () => {
     // valid test
@@ -159,6 +162,40 @@ describe('Test GET reviews/id', () => {
             .set('Accept', 'application/json').send();
         expect(response.status).toBe(400);
         response = await request(app).get(v + '/reviews/ciao').set('Content-Type', 'application/json')
+            .set('Accept', 'application/json').send();
+        expect(response.status).toBe(400);
+        done();
+    });
+
+});
+describe('Test DELETE reviews/id', () => {
+    // valid test
+    test('Success - DELETE by id', async (done) => {
+        //db.reviews.push({id:0, exam: 1, user: 1, task: 1, response: 'response'});
+        let response = await request(app).delete(v + '/reviews/0').set('Content-Type', 'application/json')
+            .set('Accept', 'application/json').send();
+        expect(response.status).toBe(204);
+
+        response = await request(app).get(v + '/reviews/2');
+        expect(response.status).toBe(404);
+
+        done();
+    });
+    //invalid test
+    test('Not found - DELETE of id not found' , async (done) => {
+        let response = await request(app).delete(v + '/reviews/3').set('Content-Type', 'application/json')
+            .set('Accept', 'application/json').send();
+        expect(response.status).toBe(404);
+        response = await request(app).delete(v + '/reviews/-2').set('Content-Type', 'application/json')
+            .set('Accept', 'application/json').send();
+        expect(response.status).toBe(404);
+        done();
+    });
+    test('Bad request- bad parameter in input ', async (done) => {
+        let response = await request(app).delete(v + '/reviews/null').set('Content-Type', 'application/json')
+            .set('Accept', 'application/json').send();
+        expect(response.status).toBe(400);
+        response = await request(app).delete(v + '/reviews/ciao').set('Content-Type', 'application/json')
             .set('Accept', 'application/json').send();
         expect(response.status).toBe(400);
         done();
