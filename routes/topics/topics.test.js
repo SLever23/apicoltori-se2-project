@@ -6,13 +6,6 @@ const app = api.app;
 var server;
 const v = '/v1';
 
-beforeAll(() => {
-    let PORT = process.env.PORT || 3000;
-    server = app.listen(PORT, () => {});
-});
-afterAll(() => {
-    server.close();
-});
 
 describe('Test GET topics/:id', () => {
 
