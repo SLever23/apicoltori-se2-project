@@ -367,7 +367,7 @@ paths:
     get:
       tags:
         - Class
-      summary: Retrieve a list of all classes by exam
+      summary: Retrieve a list of all classes
       responses:
         200:
           description: OK
@@ -375,8 +375,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Class'
-        400:
-          description: Bad Request
         401:
           description: Unauthorized
         500:
