@@ -267,8 +267,12 @@ paths:
               $ref: '#/definitions/User'
         401:
           description: Unauthorized
+        400:
+          description: Bad Request
         404:
           description: Not found
+        500:
+          description: Internal server error
     post:
       tags:
       - User
@@ -285,6 +289,8 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/User'
+        400:
+          description: Bad Request
         500:
           description: Internal server error
   /user/{id}:
@@ -300,10 +306,14 @@ paths:
           description: OK
           schema:
               $ref: '#/definitions/User'
+        400:
+          description: Bad Request
         401:
           description: Unauthorized
         404:
           description: Not found
+        500:
+          description: Internal server error
   /session:
     post:
       tags:
@@ -322,6 +332,10 @@ paths:
           schema:
             type: string
             format: UUID
+        400:
+          description: Bad Request
+        404:
+          description: Not found
         500:
           description: Internal server error
   /session/{token}:
@@ -342,6 +356,8 @@ paths:
           description: No content
         401:
           description: Unauthorized
+        404:
+          description: Not found
         500:
           description: Internal server error
           
@@ -359,8 +375,12 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Class'
+        400:
+          description: Bad Request
         401:
           description: Unauthorized
+        500:
+          description: Internal server error
     post:
       tags:
       - Class
@@ -377,6 +397,8 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/Class'
+        400:
+          description: Bad Request
         401:
           description: Unauthorized
         500:
@@ -397,10 +419,14 @@ paths:
             type: object
             items:
               $ref: '#/definitions/Class'
+        400:
+          description: Bad Request
         401:
           description: Unauthorized
         404:
           description: Not found
+        500:
+          description: Internal Server Error
     put:
       tags:
       - Class
@@ -415,6 +441,8 @@ paths:
       responses:
         204:
           description: No content
+        400:
+          description: Bad Request
         401:
           description: Unauthorized
         404:
