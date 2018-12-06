@@ -8,3 +8,5 @@ Team members:
 * [Edoardo Zacchi](https://github.com/EdoZac)
 * [Michele Tessari](https://github.com/TEXflip)
 * [Giulia Carocari](https://github.com/geeooleea)
+
+Ultima versione del file swagger su Master
