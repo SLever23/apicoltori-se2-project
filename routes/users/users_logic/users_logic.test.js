@@ -304,16 +304,8 @@ describe('Test users logic module', () => {
     
     test('Get not_existing_user_by_id', () => {
 
-        var id = 'carlino';
+        var id = 33;
         let valid = () => { 
-
-            users_logic.get_user_by_id(id);
-
-        }
-        expect(valid).toThrow();
-
-        id = -7;
-        valid = () => { 
 
             users_logic.get_user_by_id(id);
 
