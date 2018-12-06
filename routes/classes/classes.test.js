@@ -30,7 +30,7 @@ describe('Test POST classes/', () => {
         let clas = db.get_class_obj();
         let response = await request(app).post(v + '/classes/').set('Content-Type', 'application/json')
             .set('Accept', 'application/json').send(clas);
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
         done();
     });
 
@@ -40,7 +40,7 @@ describe('Test POST classes/', () => {
         let response = await request(app).post(v + '/classes/')
             .set('Content-Type', 'application/json')
             .set('Accept', 'application/json').send(clas);
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
         done();
     });
 
@@ -50,7 +50,7 @@ describe('Test POST classes/', () => {
         let response = await request(app).post(v + '/classes/')
             .set('Content-Type', 'application/json')
             .set('Accept', 'application/json').send(clas);
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
         done();
     });
 
@@ -60,7 +60,7 @@ describe('Test POST classes/', () => {
         let response = await request(app).post(v + '/classes/')
             .set('Content-Type', 'application/json')
             .set('Accept', 'application/json').send(clas);
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
         done();
     });
 
@@ -83,14 +83,14 @@ describe('Test GET classes/:id', () => {
     test('Bad request with non-number id', async (done) => {
         let id = '123abc';
         let response = await request(app).get(v + '/classes/' + id);
-        expect(response.status).toBe(404);
+        expect(response.status).toBe(400);
         done();
     });
 
     test('Bad request with negative id', async (done) => {
         let id = -12;
         let response = await request(app).get(v + '/classes/' + id);
-        expect(response.status).toBe(404);
+        expect(response.status).toBe(400);
         done();
     });
 

@@ -29,7 +29,7 @@ module.exports = {
 
         } else {
 
-            throw 'Invalid class';
+            throw {status: 400, error: 'Invalid class'};
 
         }
 
@@ -45,7 +45,7 @@ module.exports = {
 
             if (db.classes[id] == null) {
                 
-              throw 'Not existing class'  
+              throw {status: 404, error: 'Not existing class'}; 
 
             } else {
 
@@ -56,7 +56,7 @@ module.exports = {
 
         } else {
 
-            throw 'Invalid id';
+            throw {status: 400, error: 'Invalid id'}; 
 
         }
 
