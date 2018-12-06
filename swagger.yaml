@@ -52,8 +52,12 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Task'
+        400:
+          description: Bad Request
         401:
           description: Unauthorized
+        500:
+          description: Internal server error
     post:
       tags:
       - Task
@@ -64,7 +68,7 @@ paths:
         description: 'The task to be created'
         required: true
         schema:
-          $ref: '#/definitions/Task'
+          $ref: '#/definitions/TaskRequest'
       responses:
         201:
           description: Created
@@ -72,8 +76,6 @@ paths:
             $ref: '#/definitions/Task'
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         500:
           description: Internal server error
           
@@ -90,12 +92,14 @@ paths:
           description: OK
           schema:
               $ref: '#/definitions/Task'
+        400:
+          description: Bad Request
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         404:
           description: Not found
+        500:
+          description: Internal server error
     put:
       tags: 
       - Task
@@ -106,14 +110,16 @@ paths:
         description: 'The task to be updated'
         required: true
         schema:
-          $ref: '#/definitions/Task'
+          $ref: '#/definitions/TaskRequest'
       responses:
         204:
           description: No content
+        400:
+          description: Bad Request
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
+        404:
+          description: Not found
         500:
           description: Internal server error
     delete:
@@ -125,10 +131,10 @@ paths:
           description: No content
         500:
           description: Internal server error
+        400:
+          description: Bad Request
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         404:
           description: Not found
           
@@ -138,18 +144,18 @@ paths:
     get:
       tags:
       - Exam
-      summary: Retrieve all exams for a user
+      summary: Retrieve a list of exams
       parameters:
       - in: query
         name: userid
         description: 'Id of the user'
         type: integer
-        required: true
+        required: false
       - in: query
         name: teaching-assistant
         description: 'If this parameter is true (false) then the exams in which this user is a teaching assistant (student) are returned.'
         type: boolean
-        required: true
+        required: false
       responses:
         200:
           description: OK
@@ -159,8 +165,6 @@ paths:
               $ref: '#/definitions/Exam'
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
     post:
       tags:
       - Exam
@@ -171,7 +175,7 @@ paths:
         description: 'The exam to be created'
         required: true
         schema:
-          $ref: '#/definitions/Exam'
+          $ref: '#/definitions/ExamRequest'
       responses:
         201:
           description: Created
@@ -179,8 +183,6 @@ paths:
             $ref: '#/definitions/Exam'
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         500:
           description: Internal Server Error
   
@@ -201,17 +203,13 @@ paths:
       responses:
         200:
           description: OK
-          schema:
-            type: object
-            items:
-              $ref: '#/definitions/Exam'
-              #oneOf:
-              #    - $ref: '#/definitions/Exam'
-              #    - $ref: '#/definitions/StudentExam'
+          schema: 
+            $ref: '#/definitions/Exam'
+            #  oneOf:
+            #  - $ref: '#/definitions/Exam'
+            #  - $ref: '#/definitions/StudentExam'
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         404:
           description: Not found
     put:
@@ -224,14 +222,12 @@ paths:
         description: 'The exam to be updated'
         required: true
         schema:
-          $ref: '#/definitions/Exam'
+          $ref: '#/definitions/ExamRequest'
       responses:
         204:
           description: No content
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         404:
           description: Not found
         500:
@@ -245,8 +241,6 @@ paths:
           description: No content
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         404:
           description: Not found
         500:
@@ -273,8 +267,8 @@ paths:
               $ref: '#/definitions/User'
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
+        404:
+          description: Not found
     post:
       tags:
       - User
@@ -285,17 +279,31 @@ paths:
         description: 'The user to be created'
         required: true
         schema:
-          $ref: '#/definitions/User'
+          $ref: '#/definitions/UserRequest'
       responses:
         201:
           description: Created
           schema:
             $ref: '#/definitions/User'
-        403:
-          description: Forbidden
         500:
           description: Internal server error
-
+  /user/{id}:
+    get:
+      tags:
+        - User
+      summary: Retrieve a user by id
+      parameters:
+      - $ref: '#/parameters/Auth-header'
+      - $ref: '#/parameters/id'
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/User'
+        401:
+          description: Unauthorized
+        404:
+          description: Not found
   /session:
     post:
       tags:
@@ -307,7 +315,7 @@ paths:
         description: 'The user to be logged'
         required: true
         schema:
-          $ref: '#/definitions/User'
+          $ref: '#/definitions/UserRequest'
       responses:
         201:
           description: Ok
@@ -344,12 +352,6 @@ paths:
       tags:
         - Class
       summary: Retrieve a list of all classes by exam
-      parameters:
-      - in: query
-        name: exam
-        type: integer
-        required: true
-        description: Id of the exam associated with the class
       responses:
         200:
           description: OK
@@ -359,8 +361,6 @@ paths:
               $ref: '#/definitions/Class'
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
     post:
       tags:
       - Class
@@ -371,7 +371,7 @@ paths:
         description: The class to be created
         required: true
         schema:
-          $ref: '#/definitions/Class'
+          $ref: '#/definitions/ClassRequest'
       responses:
         201:
           description: Created
@@ -379,8 +379,6 @@ paths:
             $ref: '#/definitions/Class'
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         500:
           description: Internal Server Error
           
@@ -401,8 +399,6 @@ paths:
               $ref: '#/definitions/Class'
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         404:
           description: Not found
     put:
@@ -415,14 +411,12 @@ paths:
         description: 'The class to be updated'
         required: true
         schema:
-          $ref: '#/definitions/Class'
+          $ref: '#/definitions/ClassRequest'
       responses:
         204:
           description: No content
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         404:
           description: Not found
         500:
@@ -436,8 +430,6 @@ paths:
           description: No content
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         404:
           description: Not found
         500:
@@ -445,7 +437,7 @@ paths:
       
     
     
-  /submission:
+  /submissions:
     parameters:
     - $ref: '#/parameters/Auth-header'
     get:
@@ -477,8 +469,6 @@ paths:
               $ref: '#/definitions/Submission'
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
     post:
       tags:
       - Submission
@@ -489,7 +479,7 @@ paths:
         description: 'The submission to be created'
         required: true
         schema:
-          $ref: '#/definitions/Submission'
+          $ref: '#/definitions/SubmissionRequest'
       responses:
         201:
           description: Created
@@ -497,12 +487,10 @@ paths:
             $ref: '#/definitions/Submission'
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         500:
           description: Internal Server Error
           
-  /submission/{id}:
+  /submissions/{id}:
     parameters:
     - $ref: '#/parameters/id'
     - $ref: '#/parameters/Auth-header'
@@ -516,14 +504,12 @@ paths:
         description: 'The submission to be updated'
         required: true
         schema:
-          $ref: '#/definitions/Submission'
+          $ref: '#/definitions/SubmissionRequest'
       responses:
         204:
           description: No content
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         500:
           description: Internal Server Error
     get: 
@@ -537,8 +523,6 @@ paths:
               $ref: '#/definitions/Submission'
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         404: 
           description: Not found
     delete:
@@ -550,8 +534,6 @@ paths:
           description: No content
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         404:
           description: Not found
           
@@ -587,8 +569,6 @@ paths:
               $ref: '#/definitions/Review'
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
     post:
       tags:
       - Review
@@ -599,16 +579,14 @@ paths:
         description: 'The review to be created'
         required: true
         schema:
-          $ref: '#/definitions/Review'
+          $ref: '#/definitions/ReviewRequest'
       responses:
         201:
           description: Created
           schema:
-            $ref: '#/definitions/Review'
+            $ref: '#/definitions/ReviewRequest'
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         500:
           description: Internal Server Error
 
@@ -627,8 +605,6 @@ paths:
               $ref: '#/definitions/Review'
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         404:
           description: Not found
         500:
@@ -649,8 +625,6 @@ paths:
           description: No content
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         404:
           description: Not found
         500:
@@ -664,8 +638,6 @@ paths:
           description: No content
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         404:
           description: Not found
         500:
@@ -693,8 +665,6 @@ paths:
               $ref: '#/definitions/Topic'
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
     post:
       tags:
       - Topic
@@ -703,7 +673,7 @@ paths:
       - in: body
         name: topic
         schema:
-          $ref: '#/definitions/Topic'
+          $ref: '#/definitions/TopicRequest'
         required: true
         description: The topic to be created
       responses:
@@ -713,8 +683,6 @@ paths:
             $ref: '#/definitions/Topic'
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
   /topics/{id}:
     parameters:
     - $ref: '#/parameters/id'
@@ -730,8 +698,6 @@ paths:
             $ref: '#/definitions/Topic'
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         404:
           description: Not found
     put:
@@ -740,7 +706,7 @@ paths:
       - in: body
         name: topic
         schema:
-          $ref: '#/definitions/Topic'
+          $ref: '#/definitions/TopicRequest'
         required: true
         description: The topic to be updated
       responses:
@@ -759,8 +725,6 @@ paths:
           description: No content
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         404:
           description: Not found
         500:
@@ -770,7 +734,7 @@ paths:
     parameters:
     - $ref: '#/parameters/Auth-header'
     get:
-      summary: 'Retrieve the submissions a student has to review'
+      summary: Retrieve the user a student has to review for an exam's peer review
       parameters:
       - in: query
         name: exam
@@ -792,8 +756,6 @@ paths:
           description: Bad request. Exam finished or not yet started.
         401:
           description: Unauthorized
-        403:
-          description: Forbidden
         404:
           description: Not found
         500:
@@ -805,22 +767,55 @@ definitions:
     type: object
     properties:
       id:
+        description: unique id of this task
         type: integer
       title: 
+        description: Short summary of this task
         type: string
       description: 
+        description: Question to be asked to the student
         type: string
       topic:
+        description: Collection of topics associated to this task
         type: array
         items:
-          ##type: string
-          ##format: uri
           $ref: '#/definitions/Topic'
+      type:
+        description: Type of the answer to be given to this task
+        type: string
+        enum: ['multiple-choice','true-false', 'short-paragraph', 'long-paragraph']
+      answers:
+        description: If the task is a multiple-choice question then this element contains the possible answers
+        type: array
+        items: 
+          type: string
+    required:
+      - id
+      - title
+      - description
+      - type
+    
+  TaskRequest:
+    title: 'A question to be asked in an exam'
+    type: object
+    properties:
+      title: 
+        description: Short summary of this task
+        type: string
+      description: 
+        description: Question to be asked to the student
+        type: string
+      topic:
+        description: Collection of topics associated to this task
+        type: array
+        items:
+          type: integer
+          description: The id of the topic associated with this task
       type:
         type: string
         enum: ['multiple-choice','true-false', 'short-paragraph', 'long-paragraph']
-      ### Use polymorphism? Bad request?
       answers:
+        description: If the task is a multiple-choice question then this element contains the possible answers
         type: array
         items: 
           type: string
@@ -828,54 +823,195 @@ definitions:
       - title
       - description
       - type
-      
+
   Exam:
     title: 'Collection of questions to be submitted to students'
     type: object
     properties:
       id:
+        description: Unique identifier of this exam
         type: integer
       title:
+        description: Short summary of this exam
         type: string
       start_date: 
+        description: Starting time of the exam
         type: string
         format: date
       deadline_delivery: 
+        description: Deadline for submissions to be accepted
         type: string
         format: date
       deadline_review: 
+        description: Deadline for reviews to be accepted
         type: string
         format: date
       type:
+        description: The type defines how drawn tasks are assigned to students
         type: string
         enum: ['crowdsourcing','exam']
       collaborators: 
+        description: Collection of users that can edit the exam
         type: array
         items: 
+          description: Reference to the user
           type: string
           format: uri
       class: 
+        description: Reference to the class taking this exam
         type: string
         format: uri
       compulsory-tasks: 
+        description: Collection of tasks that every student will have to answer
         type: array
-        items: 
-          #type: string
-          #format: uri
+        items:
           $ref: '#/definitions/Task'
-      ### Riguardare mappa che non funziona
       task-pool:
-        type: object
-        additionalProperties:
+        description: Collection of topics and related quantity tasks will e drawn from
+        type: array
+        items:
           type: object
           properties:
-            topic:
-              #type: string
-              #format: uri
-              $ref: '#/definitions/Topic'
+            id-topic:
+              type: integer
+              description: the id of the topic you want to add
             quantity:
               type: integer
+              description: the task's quantity for this topic
     required:
+      - id
+      - title
+      - start_date
+      - deadline_delivery
+      - deadline_review
+      
+  ExamRequest:
+    title: 'Collection of questions to be submitted to students'
+    type: object
+    properties:
+      title:
+        description: Short summary of this exam
+        type: string
+      start_date: 
+        description: Starting time of the exam
+        type: string
+        format: date
+      deadline_delivery: 
+        description: Deadline for submissions to be accepted
+        type: string
+        format: date
+      deadline_review: 
+        description: Deadline for reviews to be accepted
+        type: string
+        format: date
+      type:
+        description: The type defines how drawn tasks are assigned to students
+        type: string
+        enum: ['Crowdsourcing','Exam']
+      collaborators: 
+        description: Collection of users that can edit the exam
+        type: array
+        items: 
+          description: Reference to the user
+          type: string
+          format: uri
+      class: 
+        description: id to the class taking this exam
+        type: integer
+      compulsory-tasks: 
+        description: Collection of tasks that every student will have to answer
+        type: array
+        items:
+          type: integer
+          description: id of the compulsory task
+      task-pool:
+        description: Collection of topics and related quantity tasks will e drawn from
+        type: array
+        items:
+          type: object
+          properties:
+            id-topic:
+              type: integer
+              description: the id of the topic you want to add
+            quantity:
+              type: integer
+              description: the task's quantity for this topic
+    required:
+      - title
+      - start_date
+      - deadline_delivery
+      - deadline_review
+      - type
+  
+  StudentExam:
+    title: 'Collection of questions to be submitted to students'
+    type: object
+    properties:
+      id:
+        description: Unique identifier of this exam
+        type: integer
+      user:
+        type: string
+        format: uri
+        description: Reference to the user taking the exam
+      title:
+        description: Short summary of this exam
+        type: string
+      start_date: 
+        description: Starting time of the exam
+        type: string
+        format: date
+      deadline_delivery: 
+        description: Deadline for submissions to be accepted
+        type: string
+        format: date
+      deadline_review: 
+        description: Deadline for reviews to be accepted
+        type: string
+        format: date
+      type:
+        description: The type defines how drawn tasks are assigned to students
+        type: string
+        enum: ['crowdsourcing','exam']
+      collaborators: 
+        description: Collection of users that can edit the exam
+        type: array
+        items: 
+          description: Reference to the user
+          type: string
+          format: uri
+      class: 
+        description: Reference to the class taking this exam
+        type: string
+        format: uri
+      compulsory-tasks: 
+        description: Collection of tasks that every student will have to answer
+        type: array
+        items:
+          $ref: '#/definitions/Task'
+      task-pool:
+        description: Collection of topics and related quantity tasks will e drawn from
+        type: array
+        items:
+          type: object
+          properties:
+            id-topic:
+              type: integer
+              description: the id of the topic you want to add
+            quantity:
+              type: integer
+              description: the task's quantity for this topic
+      drawn-tasks:
+        description: Collection of tasks drawn for this student
+        type: array
+        items:
+          description: Task the student has to answer
+          $ref: '#/definitions/Task'
+      mark:
+        description: The mark the student got for this exam
+        type: integer
+    required:
+      - id
       - title
       - start_date
       - deadline_delivery
@@ -883,38 +1019,50 @@ definitions:
       - collaborators
       - class
   
-  StudentExam:
-    allOf:
-    - $ref: '#/definitions/Exam'
-    - type: object
-      properties:
-        id:
-          type: integer
-          description: id of the user taking the exam
-        drawn-tasks:
-            type: array
-            items:
-              $ref: '#/definitions/Task'
-        mark:
-          type: integer
-  
   User:
     title: 'Student or teaching assistant'
     type: object
     properties:
       id:
+        description: Unique identifier of the user
         type: integer
       firstName:
+        description: First name of the user
         type: string
       lastName:
+        description: Last name of the user
         type: string
       email:
+        description: email of the user
         type: string
       password:
+        description: password of the user to log in
+        type: string
+    required:
+      - id
+      - email
+      - password
+      
+  UserRequest:
+    title: 'Student or teaching assistant'
+    type: object
+    properties:
+      firstName:
+        description: First name of the user
+        type: string
+      lastName:
+        description: Last name of the user
+        type: string
+      email:
+        description: email of the user
+        type: string
+      password:
+        description: password of the user to log in
         type: string
     required:
       - email
       - password
+
       
   Submission:
     title: 'Submission'
@@ -923,6 +1071,7 @@ definitions:
       id:
         type: integer
       exam:
+        description: 'URI of the exam correlated'
         type: string
         format: uri
       user:
@@ -930,12 +1079,37 @@ definitions:
         type: string
         format: uri
       task:
+        description: 'URI of the task correlated'
         type: string
         format: uri
       review:
+        description: 'URI of the review correlated'
         type: string
         format: uri
       response:
+        description: 'Response for the task of this submission'
+        type: string
+    required: 
+      - exam
+      - user
+      - task
+      - response
+      
+  SubmissionRequest:
+    title: 'Submission'
+    type: object
+    properties:
+      exam:
+        description: 'URI of the exam correlated'
+        type: integer
+      user:
+        description: 'URI of the user making the submission'
+        type: integer
+      task:
+        description: 'URI of the task correlated'
+        type: integer
+      response:
+        description: 'Response for the task of this submission'
         type: string
     required: 
       - exam
@@ -950,6 +1124,7 @@ definitions:
       id:
         type: integer
       exam:
+        description: 'URI of the exam associated with the review'
         type: string
         format: uri
       user:
@@ -957,23 +1132,65 @@ definitions:
         type: string
         format: uri
       task:
+        description: 'URI of the task associated with the review'
         type: string
         format: uri
       submission:
+        description: 'URI of the submission associated with the review'
         type: string
         format: uri
       response:
+        description: 'Response of the review'
         type: string
     required:
       - id
-    
+      - exam
+      - user
+      - task
+      - response
+
+  ReviewRequest:
+    title: 'Review of a submission'
+    type: object
+    properties:
+      exam:
+        description: 'URI of the exam associated with the review'
+        type: integer
+      user:
+        description: 'URI of the user making the review'
+        type: integer
+      task:
+        description: 'URI of the task associated with the review'
+        type: integer
+      response:
+        description: 'Response of the review'
+        type: string
+    required: 
+      - exam
+      - user
+      - task
+      - response
+
   Topic:
     title: 'Topic of a task'
     type: object
     properties:
       id:
+        description: Unique identifier of the topic
         type: integer
       title:
+        description: Short description to identify the topic
+        type: string
+    required:
+      - id
+      - title
+
+  TopicRequest:
+    title: 'Topic of a task'
+    type: object
+    properties:
+      title:
+        description: Short description to identify the topic
         type: string
     required:
       - title
@@ -983,14 +1200,36 @@ definitions:
     type: object
     properties:
       id:
+        description: Unique id of the class
         type: integer
       name:
+        description: Name used to identify the class
         type: string
       students:
+        description: Collection of students in this class
         type: array
         items: 
+          description: Reference to students in the class
           type: string
           format: uri
+    required:
+      - id
+      - name
+      - students
+
+  ClassRequest:
+    title: 'Group of students'
+    type: object
+    properties:
+      name:
+        description: Name used to identify the class
+        type: string
+      students:
+        description: Collection of students in this class
+        type: array
+        items: 
+          description: id of the students in the class
+          type: integer
     required:
       - name
       - students
