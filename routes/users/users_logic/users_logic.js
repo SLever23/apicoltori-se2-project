@@ -44,7 +44,7 @@ module.exports = {
 
         } else {
 
-            throw 'Invalid user';
+            throw {status: 400, text: 'Invalid user'};
 
         }
 
@@ -58,12 +58,20 @@ module.exports = {
 
         if (module.exports.validate_id(id)) {
 
-            return db.users[id];
+            if(db.users[id] == null) {
+
+                throw {status: 404, text: 'User not found'};
+
+            } else {
+                
+                return db.users[id];
+
+            }
             
 
         } else {
 
-            throw 'Invalid id';
+            throw {status: 400, text: 'Invalid user'};
 
         }
 

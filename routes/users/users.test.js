@@ -24,7 +24,7 @@ describe('Test POST users/', () => {
 
             .set('Accept', 'application/json').send(user);
 
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
 
         done();
 
@@ -44,7 +44,7 @@ describe('Test POST users/', () => {
 
             .set('Accept', 'application/json').send(user);
 
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
 
         done();
 
@@ -64,7 +64,7 @@ describe('Test POST users/', () => {
 
             .set('Accept', 'application/json').send(user);
 
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
 
         done();
 
@@ -83,7 +83,7 @@ describe('Test POST users/', () => {
 
             .set('Accept', 'application/json').send(user);
 
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
 
         done();
 
@@ -103,7 +103,7 @@ describe('Test POST users/', () => {
 
             .set('Accept', 'application/json').send(user);
 
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
 
         done();
 
@@ -123,7 +123,7 @@ describe('Test POST users/', () => {
 
             .set('Accept', 'application/json').send(user);
 
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
 
         done();
 
@@ -142,7 +142,7 @@ describe('Test POST users/', () => {
 
             .set('Accept', 'application/json').send(user);
 
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
 
         done();
 
@@ -162,7 +162,7 @@ describe('Test POST users/', () => {
 
             .set('Accept', 'application/json').send(user);
 
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
 
         done();
 
@@ -182,7 +182,7 @@ describe('Test POST users/', () => {
 
             .set('Accept', 'application/json').send(user);
 
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
 
         done();
 
@@ -202,7 +202,7 @@ describe('Test POST users/', () => {
 
             .set('Accept', 'application/json').send(user);
 
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
 
         done();
 
@@ -280,7 +280,7 @@ describe('Test GET users/:id', () => {
 
         let response = await request(app).get(v + '/users/' + id);
 
-        expect(response.status).toBe(404);
+        expect(response.status).toBe(400);
 
         done();
 
@@ -293,12 +293,57 @@ describe('Test GET users/:id', () => {
 
         let response = await request(app).get(v + '/users/' + id);
 
+        expect(response.status).toBe(400);
+
+        done();
+
+    });
+
+    
+
+
+
+    test('Not found', async (done) => {
+
+        // Big enough to be out of array
+
+        let id = 50000;
+
+        let response = await request(app).get(v + '/users/' + id);
+
         expect(response.status).toBe(404);
 
         done();
 
     });
 
+
+
+    test('Not found because deleted', async (done) => {
+
+        let id;
+
+        let f = db.users.forEach((element, index, arr) => {
+
+            if (element == undefined) {
+
+                id = index;
+
+            }
+
+        });
+
+        if (id != undefined) {
+
+            let response = await request(app).get(v + '/users/' + id);
+
+            expect(response.status).toBe(404);
+
+        }
+
+        done();
+
+    });
 
 
     test('Success', async (done) => {
