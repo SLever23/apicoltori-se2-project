@@ -17,13 +17,25 @@ module.exports = {
     },
 
     submissions_get: (req, res) => {
-        console.log(req.query.id)
-        console.log(typeof req.query.id); 
+        let user = req.query.user;
+        let exam = req.query.exam;
+        let task = req.query.task;
+
+        try {
+            let result = submission_logic.sumbission_get_all(user, exam, task);
+            res.status(200).json(result);
+        }
+        catch (error) {
+            if(error=='Bad Request')
+            {
+                res.sendStatus(400);
+            }
+        }
     },
 
-    submissions_id_put: (req, res) => {
+    /*submissions_id_put: (req, res) => {
         res.status(501).send('Coming soon!');
-    },
+    },*/
 
     submissions_id_get: (req, res) => {
         try {
@@ -40,7 +52,7 @@ module.exports = {
 
     submissions_id_delete: (req, res) => {
         try {
-            if(submission_logic.sumbission_delete(req.params.id))
+            if (submission_logic.sumbission_delete(req.params.id))
                 res.sendStatus(204);
             else
                 res.sendStatus(404);

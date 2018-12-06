@@ -3,13 +3,7 @@ const api = require('../../api.js');
 const request = require('supertest');
 const db = require('../../db/db.js');
 const app = api.app;
-//var server;
 const v = '/v1';
-const fetch = require('node-fetch');
-
-const PORT = process.env.PORT || 3000;
-
-const SERVER_URL = process.env.SERVER_URL || 'http://localhost:' + PORT + '/v1/submissions';
 
 beforeAll(function () {
     db.exams.push({ id: 0 });
@@ -148,7 +142,7 @@ describe('Test DELETE Submission', () => {
         done();
     })
 
-    test('test valid DELETE not found submission', async (done) => {
+    test('test valid DELETE not found submission + check', async (done) => {
         db.submissions.push({ id: 0, exam: 0, user: 0, task: 0, response: "response" });
         let id=0;
         let response = await request(app).delete(v + '/submissions/' + id);
@@ -157,6 +151,55 @@ describe('Test DELETE Submission', () => {
         response = await request(app).get(v + '/submissions/' + id);
         expect(response.status).toBe(404);
 
+        let user = 0;
+        let exam = 0;
+        let task = 0;
+        response = await request(app).get(v + '/submissions?user='+user+'&&exam='+exam+'&&task='+task);
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual([]);
+
+        db.submissions.pop();
         done();
+    })
+});
+
+describe('Test GET Submission', () => {
+    test('test invalid parameters for GET submission', async (done) => {
+        let user = 0;
+        let exam = 0;
+        let task = 0;
+        let response = await request(app).get(v + '/submissions?user=&&exam='+exam+'&&task='+task);
+        expect(response.status).toBe(400);
+
+        response = await request(app).get(v + '/submissions?user='+user+'&&exam=&&task='+task);
+        expect(response.status).toBe(400);
+        done();
+    })
+
+    test('test valid parameters for GET submission', async (done) => {
+        let user = 0;
+        let exam = 0;
+        let task = 0;
+        let response = await request(app).get(v + '/submissions?user='+user+'&&exam='+exam+'&&task='+task);
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual([]);
+
+        response = await request(app).get(v + '/submissions?user='+user+'&&exam='+exam);
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual([]);
+
+        db.submissions.push({ id: 0, exam: 0, user: 0, task: 0, response: "response" });
+        db.submissions.push({ id: 1, exam: 0, user: 0, task: 1, response: "ciao" });
+
+        response = await request(app).get(v + '/submissions?user='+user+'&&exam='+exam);
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual([{ id: 0, exam: 0, user: 0, task: 0, response: "response" }, { id: 1, exam: 0, user: 0, task: 1, response: "ciao" }]);
+        done();
+
+        response = await request(app).get(v + '/submissions?user='+user+'&&exam='+exam+'&&task='+task);
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual([{ id: 0, exam: 0, user: 0, task: 0, response: "response" }]);        
+        done();
+
     })
 });

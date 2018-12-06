@@ -51,7 +51,6 @@ function sumbission_delete(id) {
     throw 'Bad Request'
 }
 
-//prova con isNaN
 function integer_check(id)
 {
     if(id!=null && id!=undefined && Number.isInteger(+id))
@@ -63,17 +62,17 @@ function integer_check(id)
 
 function sumbission_get_all(userId, examId, taskId) {
     let result = [];
-    if (arguments.length==2 && Number.isInteger(+examId) && Number.isInteger(+userId)) {
+    if (taskId==undefined && examId!=='' && userId!=='' && Number.isInteger(+examId) && Number.isInteger(+userId)) {
         db.submissions.forEach(element => {
-            if (element.exam == examId && element.user == userId) {
+            if (element && element.exam == examId && element.user == userId) {
                 result.push(element);
             }
         })
         return result;
     }
-    else if(arguments.length==3 && Number.isInteger(+examId) && Number.isInteger(+userId) && Number.isInteger(+taskId)) {
+    else if(examId!=='' && userId!=='' && taskId!=='' && Number.isInteger(+examId) && Number.isInteger(+userId) && Number.isInteger(+taskId)) {
         db.submissions.forEach(element => {
-            if (element.exam == examId && element.user == userId && element.task==taskId) {
+            if (element && element.exam == examId && element.user == userId && element.task==taskId) {
                 result.push(element);
             }
         })
