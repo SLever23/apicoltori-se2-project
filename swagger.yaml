@@ -246,7 +246,7 @@ paths:
         500:
           description: Internal server error
           
-  /user:
+  /users:
     get:
       tags:
         - User
@@ -293,7 +293,7 @@ paths:
           description: Bad Request
         500:
           description: Internal server error
-  /user/{id}:
+  /users/{id}:
     get:
       tags:
         - User
@@ -880,13 +880,11 @@ definitions:
         description: Collection of users that can edit the exam
         type: array
         items: 
-          description: Reference to the user
-          type: string
-          format: uri
+          description: Id of the user
+          type: integer
       class: 
-        description: Reference to the class taking this exam
-        type: string
-        format: uri
+        description: Id of the class taking this exam
+        type: integer
       compulsory-tasks: 
         description: Collection of tasks that every student will have to answer
         type: array
@@ -938,9 +936,8 @@ definitions:
         description: Collection of users that can edit the exam
         type: array
         items: 
-          description: Reference to the user
-          type: string
-          format: uri
+          description: Id of the user
+          type: integer
       class: 
         description: id to the class taking this exam
         type: integer
@@ -977,8 +974,7 @@ definitions:
         description: Unique identifier of this exam
         type: integer
       user:
-        type: string
-        format: uri
+        type: integer
         description: Reference to the user taking the exam
       title:
         description: Short summary of this exam
@@ -1003,13 +999,11 @@ definitions:
         description: Collection of users that can edit the exam
         type: array
         items: 
-          description: Reference to the user
-          type: string
-          format: uri
+          description: Id of the user
+          type: integer
       class: 
-        description: Reference to the class taking this exam
-        type: string
-        format: uri
+        description: Id of the class taking this exam
+        type: integer
       compulsory-tasks: 
         description: Collection of tasks that every student will have to answer
         type: array
@@ -1061,13 +1055,9 @@ definitions:
       email:
         description: email of the user
         type: string
-      password:
-        description: password of the user to log in
-        type: string
     required:
       - id
       - email
-      - password
       
   UserRequest:
     title: 'Student or teaching assistant'
@@ -1097,21 +1087,17 @@ definitions:
       id:
         type: integer
       exam:
-        description: 'URI of the exam correlated'
-        type: string
-        format: uri
+        description: 'Id of the exam correlated'
+        type: integer
       user:
-        description: 'URI of the user making the submission'
-        type: string
-        format: uri
+        description: 'Id of the user making the submission'
+        type: integer
       task:
-        description: 'URI of the task correlated'
-        type: string
-        format: uri
+        description: 'Id of the task correlated'
+        type: integer
       review:
-        description: 'URI of the review correlated'
-        type: string
-        format: uri
+        description: 'Id of the review correlated'
+        type: integer
       response:
         description: 'Response for the task of this submission'
         type: string
@@ -1126,13 +1112,13 @@ definitions:
     type: object
     properties:
       exam:
-        description: 'URI of the exam correlated'
+        description: 'Id of the exam correlated'
         type: integer
       user:
-        description: 'URI of the user making the submission'
+        description: 'Id of the user making the submission'
         type: integer
       task:
-        description: 'URI of the task correlated'
+        description: 'Id of the task correlated'
         type: integer
       response:
         description: 'Response for the task of this submission'
@@ -1150,21 +1136,17 @@ definitions:
       id:
         type: integer
       exam:
-        description: 'URI of the exam associated with the review'
-        type: string
-        format: uri
+        description: 'Id of the exam associated with the review'
+        type: integer
       user:
-        description: 'URI of the user making the review'
-        type: string
-        format: uri
+        description: 'Id of the user making the review'
+        type: integer
       task:
-        description: 'URI of the task associated with the review'
-        type: string
-        format: uri
+        description: 'Id of the task associated with the review'
+        type: integer
       submission:
-        description: 'URI of the submission associated with the review'
-        type: string
-        format: uri
+        description: 'Id of the submission associated with the review'
+        type: integer
       response:
         description: 'Response of the review'
         type: string
@@ -1180,13 +1162,13 @@ definitions:
     type: object
     properties:
       exam:
-        description: 'URI of the exam associated with the review'
+        description: 'Id of the exam associated with the review'
         type: integer
       user:
-        description: 'URI of the user making the review'
+        description: 'Id of the user making the review'
         type: integer
       task:
-        description: 'URI of the task associated with the review'
+        description: 'Id of the task associated with the review'
         type: integer
       response:
         description: 'Response of the review'
@@ -1235,9 +1217,8 @@ definitions:
         description: Collection of students in this class
         type: array
         items: 
-          description: Reference to students in the class
-          type: string
-          format: uri
+          description: Id of students in the class
+          type: integer
     required:
       - id
       - name
